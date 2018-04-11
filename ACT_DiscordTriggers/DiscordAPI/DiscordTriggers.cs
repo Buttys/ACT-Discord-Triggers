@@ -119,7 +119,7 @@ namespace DiscordAPI
             }
             catch (Exception)
             {
-                await Context.Channel.SendMessageAsync($"No parses found for {character}.");
+                await Context.Channel.SendMessageAsync($"No parses found for {character} or Incorrect FFLogs Token.");
                 return;
             }
             List<Parses> parses = new List<Parses>();

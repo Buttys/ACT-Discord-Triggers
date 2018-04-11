@@ -19,16 +19,18 @@ namespace DiscordAPI
         private static DiscordSocketClient bot;
         private static IAudioClient audioClient;
         private static AudioOutStream voiceStream;
-        public static string FFLogsToken { get; private set; }
+        public static string FFLogsToken;
 
-        public delegate void BotLoaded();
-        public static BotLoaded BotReady;
+        public delegate void Trigger();
+        public static Trigger BotReady;
+        public static Trigger LoginFail;
 
         public delegate void BotMessage(string message);
         public static BotMessage Log;
 
-        public static bool InIt(string logintoken, string fflogstoken)
+        public static async void InIt(string logintoken, string fflogstoken)
         {
+            FFLogsToken = fflogstoken;
             try
             {
                 bot = new DiscordSocketClient(new DiscordSocketConfig
@@ -39,32 +41,32 @@ namespace DiscordAPI
             catch (NotSupportedException)
             {
                 Log("Unsupported Operating System.");
-                return false;
             }
 
             try
             {
-                commands = new CommandService();
-                services = new ServiceCollection().BuildServiceProvider();
+                bot.Ready -= Bot_Ready;
                 bot.Ready += Bot_Ready;
-                commands.AddModuleAsync(typeof(DiscordTriggers));
-                bot.LoginAsync(TokenType.Bot, logintoken);
-                bot.StartAsync();
-                bot.MessageReceived += Bot_MessageReceived;
-                FFLogsToken = fflogstoken;
+                await bot.LoginAsync(TokenType.Bot, logintoken);
+                await bot.StartAsync();
+                //need to wait to double check login issues
+                //as exceptions are not always thrown
+                await Task.Delay(10000);
+                if (!IsConnected())
+                    LoginFail?.Invoke();
             }
             catch (Exception ex)
             {
                 Log(ex.Message);
-                return false;
+                LoginFail?.Invoke();
             }
-            return true;
         }
 
         public static async Task deInIt()
         {
             voiceStream = null;
             bot.Ready -= Bot_Ready;
+            bot.MessageReceived -= Bot_MessageReceived;
             if (audioClient?.ConnectionState == ConnectionState.Connected)
             {
                 voiceStream?.Close();
@@ -81,8 +83,13 @@ namespace DiscordAPI
 
         private static async Task Bot_Ready()
         {
+            commands = new CommandService();
+            services = new ServiceCollection().BuildServiceProvider();
+            await commands.AddModuleAsync(typeof(DiscordTriggers));
+            bot.MessageReceived += Bot_MessageReceived;
             await bot.SetGameAsync("with ACT Triggers");
             BotReady?.Invoke();
+            bot.Ready -= Bot_Ready;
         }
 
         public static string[] getServers()

@@ -43,7 +43,7 @@ namespace ACT_DiscordTriggers
             this.label2 = new System.Windows.Forms.Label();
             this.txtDiscordID = new System.Windows.Forms.TextBox();
             this.chkAutoConnect = new System.Windows.Forms.CheckBox();
-            this.discordConnectbtn = new System.Windows.Forms.Button();
+            this.btnDiscordConnect = new System.Windows.Forms.Button();
             this.txtFFLogsToken = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.sliderTTSSpeed = new System.Windows.Forms.TrackBar();
@@ -116,7 +116,7 @@ namespace ACT_DiscordTriggers
             this.tabPage1.Controls.Add(this.label2);
             this.tabPage1.Controls.Add(this.txtDiscordID);
             this.tabPage1.Controls.Add(this.chkAutoConnect);
-            this.tabPage1.Controls.Add(this.discordConnectbtn);
+            this.tabPage1.Controls.Add(this.btnDiscordConnect);
             this.tabPage1.Controls.Add(this.txtFFLogsToken);
             this.tabPage1.Controls.Add(this.label1);
             this.tabPage1.Controls.Add(this.sliderTTSSpeed);
@@ -158,7 +158,6 @@ namespace ACT_DiscordTriggers
             this.txtFFXIVName.Name = "txtFFXIVName";
             this.txtFFXIVName.Size = new System.Drawing.Size(193, 20);
             this.txtFFXIVName.TabIndex = 44;
-            this.txtFFXIVName.Text = "Buttys";
             // 
             // label2
             // 
@@ -187,15 +186,15 @@ namespace ACT_DiscordTriggers
             this.chkAutoConnect.Text = "Auto Connect";
             this.chkAutoConnect.UseVisualStyleBackColor = true;
             // 
-            // discordConnectbtn
+            // btnDiscordConnect
             // 
-            this.discordConnectbtn.Location = new System.Drawing.Point(30, 136);
-            this.discordConnectbtn.Name = "discordConnectbtn";
-            this.discordConnectbtn.Size = new System.Drawing.Size(93, 23);
-            this.discordConnectbtn.TabIndex = 40;
-            this.discordConnectbtn.Text = "Connect";
-            this.discordConnectbtn.UseVisualStyleBackColor = true;
-            this.discordConnectbtn.Click += new System.EventHandler(this.discordConnectbtn_Click);
+            this.btnDiscordConnect.Location = new System.Drawing.Point(30, 136);
+            this.btnDiscordConnect.Name = "btnDiscordConnect";
+            this.btnDiscordConnect.Size = new System.Drawing.Size(93, 23);
+            this.btnDiscordConnect.TabIndex = 40;
+            this.btnDiscordConnect.Text = "Connect";
+            this.btnDiscordConnect.UseVisualStyleBackColor = true;
+            this.btnDiscordConnect.Click += new System.EventHandler(this.discordConnectbtn_Click);
             // 
             // txtFFLogsToken
             // 
@@ -704,7 +703,7 @@ namespace ACT_DiscordTriggers
         public TextBox txtFFLogsToken;
         private Label label1;
        
-        private Button discordConnectbtn;
+        private Button btnDiscordConnect;
         private GroupBox groupBox5;
         private TableLayoutPanel tableLayoutPanel2;
         private TextBox txtDirThree;
@@ -746,6 +745,8 @@ namespace ACT_DiscordTriggers
             txtTrigger.KeyUp += AddNewListItem;
             txtFriend.KeyUp += AddNewListItem;
 
+            txtFFLogsToken.TextChanged += UpdateToken;
+
             lstTwoDirections.KeyUp += RemoveListItem;
             lstThreeDirections.KeyUp += RemoveListItem;
             lstMapTriggers.KeyUp += RemoveListItem;
@@ -753,6 +754,7 @@ namespace ACT_DiscordTriggers
 
             //Discord Bot Stuff
             DiscordClient.BotReady += BotReady;
+            DiscordClient.LoginFail += LoginFail;
             DiscordClient.Log += Log;
 
             if (chkAutoConnect.Checked)
@@ -810,8 +812,16 @@ namespace ACT_DiscordTriggers
 		}
         private void BotReady()
         {
+            ActGlobals.oFormActMain.OnCombatEnd += OFormActMain_OnCombatEnd;
+            Log("Connected to Discord.");
             btnJoin.Enabled = true;
             populateServers();
+        }
+
+        private void LoginFail()
+        {
+            Log("Error connecting to Discord. Discord may be down or key is incorrect.");
+            btnDiscordConnect.Enabled = true;
         }
 
 
@@ -1142,6 +1152,8 @@ namespace ACT_DiscordTriggers
 				}
 				xReader.Close();
 			}
+            if (!string.IsNullOrEmpty(txtFFXIVName.Text))
+                activePlayer = txtFFXIVName.Text;
 		}
 
 		public bool SaveSettings() {
@@ -1215,24 +1227,16 @@ namespace ACT_DiscordTriggers
             txt.Clear();
         }
 
+        private void UpdateToken(object sender, EventArgs e)
+        {
+            DiscordClient.FFLogsToken = txtFFLogsToken.Text;
+        }
+
         private void discordConnectbtn_Click(object sender, EventArgs e)
         {
-
-            if (DiscordClient.IsConnected())
-            {
-                Log("Already connected to Discord.");
-                return;
-            }
-
-            if (DiscordClient.InIt(txtToken.Text,txtFFLogsToken.Text))
-            {
-                ActGlobals.oFormActMain.OnCombatEnd += OFormActMain_OnCombatEnd;
-                Log("Connected to Discord.");
-            }
-            else
-                Log("Error connecting to Discord. Discord may be down or key is incorrect.");
-
-
+            btnDiscordConnect.Enabled = false;
+            Log("Connecting to Discord...");
+            DiscordClient.InIt(txtToken.Text, txtFFLogsToken.Text);
         }
 
         private void btnAddTriggers_Click(object sender, EventArgs e)
