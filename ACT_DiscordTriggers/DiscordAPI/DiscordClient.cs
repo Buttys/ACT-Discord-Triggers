@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Speech.AudioFormat;
 using System.Speech.Synthesis;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace DiscordAPI
@@ -204,8 +205,17 @@ namespace DiscordAPI
 
             var content = new CommandContext(bot, msg);
 
-            if (msg.HasStringPrefix("https://www.fflogs.com/character/id/", ref pos))
-                await DiscordTriggers.getFFLogsFromLink(msg.Content, content);
+            if (msg.Content.Contains("https://www.fflogs.com/character/id/"))
+            {
+
+                Regex urlRx = new Regex(@"(?<url>(http:|https:[/][/]|www.)([a-z]|[A-Z]|[0-9]|[/.]|[~])*)", RegexOptions.IgnoreCase);
+
+                MatchCollection matches = urlRx.Matches(msg.Content);
+                foreach (Match match in matches)
+                {
+                    await DiscordTriggers.getFFLogsFromLink(match.Value, content);
+                }
+            }
 
             if (!(msg.HasCharPrefix(prefix, ref pos) || msg.HasMentionPrefix(bot.CurrentUser, ref pos)))
                 return;

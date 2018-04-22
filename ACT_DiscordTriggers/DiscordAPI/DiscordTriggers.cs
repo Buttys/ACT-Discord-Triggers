@@ -41,7 +41,7 @@ namespace DiscordAPI
             }
             catch
             {
-                await Context.Channel.SendMessageAsync($"Invalid link or FFLogs is down.");
+                await Context.Channel.SendMessageAsync(string.Format("Failed to load - {0}",link));
             }
         }
 
