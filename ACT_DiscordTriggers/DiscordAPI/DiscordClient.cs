@@ -64,7 +64,6 @@ namespace DiscordAPI
 
         public static async Task deInIt()
         {
-            voiceStream = null;
             bot.Ready -= Bot_Ready;
             bot.MessageReceived -= Bot_MessageReceived;
             if (audioClient?.ConnectionState == ConnectionState.Connected)
@@ -179,7 +178,8 @@ namespace DiscordAPI
         {
             voiceStream?.Close();
             voiceStream = null;
-            await audioClient.StopAsync();
+            if(audioClient.ConnectionState == ConnectionState.Connected)
+                await audioClient.StopAsync();
         }
 
         public static async void SendChannelMessage(ulong id, string message)
@@ -202,10 +202,13 @@ namespace DiscordAPI
 
             int pos = 0;
 
+            var content = new CommandContext(bot, msg);
+
+            if (msg.HasStringPrefix("https://www.fflogs.com/character/id/", ref pos))
+                await DiscordTriggers.getFFLogsFromLink(msg.Content, content);
+
             if (!(msg.HasCharPrefix(prefix, ref pos) || msg.HasMentionPrefix(bot.CurrentUser, ref pos)))
                 return;
-
-            var content = new CommandContext(bot, msg);
 
             var result = await commands.ExecuteAsync(content, pos, services);
 #if DEBUG

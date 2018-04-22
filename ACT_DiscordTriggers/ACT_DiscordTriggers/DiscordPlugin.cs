@@ -38,6 +38,7 @@ namespace ACT_DiscordTriggers
 		private void InitializeComponent() {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.chkParseFilter = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
             this.txtFFXIVName = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -81,7 +82,6 @@ namespace ACT_DiscordTriggers
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.txtTrigger = new System.Windows.Forms.TextBox();
             this.lstMapTriggers = new System.Windows.Forms.ListBox();
-            this.chkParseFilter = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sliderTTSSpeed)).BeginInit();
@@ -142,6 +142,18 @@ namespace ACT_DiscordTriggers
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Settings";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // chkParseFilter
+            // 
+            this.chkParseFilter.AutoSize = true;
+            this.chkParseFilter.Checked = true;
+            this.chkParseFilter.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkParseFilter.Location = new System.Drawing.Point(132, 162);
+            this.chkParseFilter.Name = "chkParseFilter";
+            this.chkParseFilter.Size = new System.Drawing.Size(83, 17);
+            this.chkParseFilter.TabIndex = 46;
+            this.chkParseFilter.Text = "Filter Parses";
+            this.chkParseFilter.UseVisualStyleBackColor = true;
             // 
             // label3
             // 
@@ -625,18 +637,6 @@ namespace ACT_DiscordTriggers
             this.lstMapTriggers.Size = new System.Drawing.Size(422, 347);
             this.lstMapTriggers.TabIndex = 1;
             // 
-            // chkParseFilter
-            // 
-            this.chkParseFilter.AutoSize = true;
-            this.chkParseFilter.Checked = true;
-            this.chkParseFilter.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkParseFilter.Location = new System.Drawing.Point(132, 162);
-            this.chkParseFilter.Name = "chkParseFilter";
-            this.chkParseFilter.Size = new System.Drawing.Size(83, 17);
-            this.chkParseFilter.TabIndex = 46;
-            this.chkParseFilter.Text = "Filter Parses";
-            this.chkParseFilter.UseVisualStyleBackColor = true;
-            // 
             // DiscordPlugin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -910,6 +910,7 @@ namespace ACT_DiscordTriggers
         public void Log(string text)
         {
             logBox.AppendText(text + "\n");
+            Console.WriteLine(text);
         }
 
         private string activePlayer = "You";
@@ -978,8 +979,8 @@ namespace ACT_DiscordTriggers
             try
             {
                 string dir = PickDirection();
-                string q = lstMapTriggers.Items[ran.Next(lstMapTriggers.Items.Count + 1)].ToString();
-                string f = lstFriends.Items[ran.Next(lstFriends.Items.Count + 1)].ToString();
+                string q = lstMapTriggers.Items[ran.Next(lstMapTriggers.Items.Count)].ToString();
+                string f = lstFriends.Items[ran.Next(lstFriends.Items.Count)].ToString();
                 return string.Format(q, dir, f);
             }
             catch
@@ -990,7 +991,7 @@ namespace ACT_DiscordTriggers
 
         private string PickDirection()
         {
-            return normalCanals ? lstTwoDirections.Items[ran.Next(lstTwoDirections.Items.Count + 1)].ToString() : lstThreeDirections.Items[ran.Next(lstThreeDirections.Items.Count + 1)].ToString();
+            return normalCanals ? lstTwoDirections.Items[ran.Next(lstTwoDirections.Items.Count)].ToString() : lstThreeDirections.Items[ran.Next(lstThreeDirections.Items.Count)].ToString();
 
         }
 

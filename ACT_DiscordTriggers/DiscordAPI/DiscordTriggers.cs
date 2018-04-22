@@ -25,6 +25,44 @@ namespace DiscordAPI
             return client;
         }
 
+        public static async Task getFFLogsFromLink(string link, ICommandContext Context)
+        {
+            try
+            {
+                var url = new Uri(link);
+                HttpClient client = NewClient();
+
+                string responseBody = await client.GetStringAsync(url);
+
+                string charname = Between(responseBody, "<div id=\"character-name\">", "</div>");
+                string charserver = Between(responseBody,string.Format("<a id=\"server-link\" href=\"/servers/{0}\">", Between(responseBody,"<a id=\"server-link\" href=\"/servers/", "\">")), "</a>");
+
+                await getFFLogs(charserver, charname, Context);
+            }
+            catch
+            {
+                await Context.Channel.SendMessageAsync($"Invalid link or FFLogs is down.");
+            }
+        }
+
+        private static string Between(string value, string a, string b)
+        {
+            int posA = value.IndexOf(a);
+
+            if (posA == -1)
+                return string.Empty;
+
+            int adjustedPosA = posA + a.Length;
+
+            string valueStart = value.Substring(adjustedPosA);
+
+            int posB = valueStart.IndexOf(b);
+
+            if (posB == -1)
+                return string.Empty;
+            return value.Substring(adjustedPosA, posB);
+        }
+
         private static string GetClass(string name)
         {
             switch (name)
@@ -68,12 +106,17 @@ namespace DiscordAPI
         [Summary("Drellis speciality")]
         public async Task Fflogs(string server, [Remainder] string name)
         {
-            await Fflog(server, name);
+            await getFFLogs(server, name, Context);
         }
 
         [Command("fflog")]
         [Summary("Drellis speciality")]
         public async Task Fflog(string server, [Remainder] string name)
+        {
+            await getFFLogs(server, name, Context);
+        }
+
+        public static async Task getFFLogs(string server, string name, ICommandContext Context)
         {
             string character = string.Empty;
 
