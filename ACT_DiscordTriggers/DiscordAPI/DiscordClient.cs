@@ -21,6 +21,7 @@ namespace DiscordAPI
         private static IAudioClient audioClient;
         private static AudioOutStream voiceStream;
         public static string FFLogsToken;
+        private static bool EnableDiscordCommands;
 
         public delegate void Trigger();
         public static Trigger BotReady;
@@ -86,10 +87,22 @@ namespace DiscordAPI
             commands = new CommandService();
             services = new ServiceCollection().BuildServiceProvider();
             await commands.AddModuleAsync(typeof(DiscordTriggers));
-            bot.MessageReceived += Bot_MessageReceived;
-            await bot.SetGameAsync("with ACT Triggers");
+            EnableCommands(EnableDiscordCommands);
+            await bot.SetGameAsync("with Discord");
             BotReady?.Invoke();
             bot.Ready -= Bot_Ready;
+        }
+
+        public static void EnableCommands(bool enable)
+        {
+            EnableDiscordCommands = enable;
+            if (IsConnected())
+            {
+                if (EnableDiscordCommands)
+                    bot.MessageReceived += Bot_MessageReceived;
+                else
+                    bot.MessageReceived -= Bot_MessageReceived;
+            }
         }
 
         public static string[] getServers()
@@ -172,6 +185,7 @@ namespace DiscordAPI
                     return false;
                 }
             }
+            await bot.SetGameAsync("with ACT Triggers");
             return true;
         }
 
@@ -181,6 +195,7 @@ namespace DiscordAPI
             voiceStream = null;
             if(audioClient.ConnectionState == ConnectionState.Connected)
                 await audioClient.StopAsync();
+            await bot.SetGameAsync("with Discord");
         }
 
         public static async void SendChannelMessage(ulong id, string message)
@@ -235,19 +250,22 @@ namespace DiscordAPI
         {
             lock (speaklock)
             {
-                if (voiceStream == null)
-                    voiceStream = audioClient.CreatePCMStream(AudioApplication.Voice, 128 * 1024);
-                SpeechSynthesizer tts = new SpeechSynthesizer();
-                tts.SelectVoice(voice);
-                tts.Volume = vol * 5;
-                tts.Rate = speed - 10;
-                MemoryStream ms = new MemoryStream();
-                tts.SetOutputToAudioStream(ms, formatInfo);
+                if (audioClient?.ConnectionState == ConnectionState.Connected)
+                {
+                    if (voiceStream == null)
+                        voiceStream = audioClient.CreatePCMStream(AudioApplication.Voice, 128 * 1024);
+                    SpeechSynthesizer tts = new SpeechSynthesizer();
+                    tts.SelectVoice(voice);
+                    tts.Volume = vol * 5;
+                    tts.Rate = speed - 10;
+                    MemoryStream ms = new MemoryStream();
+                    tts.SetOutputToAudioStream(ms, formatInfo);
 
-                tts.Speak(text);
-                ms.Seek(0, SeekOrigin.Begin);
-                ms.CopyTo(voiceStream);
-                voiceStream.Flush();
+                    tts.Speak(text);
+                    ms.Seek(0, SeekOrigin.Begin);
+                    ms.CopyTo(voiceStream);
+                    voiceStream.Flush();
+                }
             }
         }
 
@@ -255,20 +273,23 @@ namespace DiscordAPI
         {
             lock (speaklock)
             {
-                if (voiceStream == null)
-                    voiceStream = audioClient.CreatePCMStream(AudioApplication.Voice, 128 * 1024);
-                try
+                if (audioClient.ConnectionState == ConnectionState.Connected)
                 {
-                    WaveFileReader wav = new WaveFileReader(path);
-                    WaveFormat waveFormat = new WaveFormat(48000, 16, 2);
-                    WaveStream pcm = WaveFormatConversionStream.CreatePcmStream(wav);
-                    WaveFormatConversionStream output = new WaveFormatConversionStream(waveFormat, pcm);
-                    output.CopyTo(voiceStream);
-                    voiceStream.Flush();
-                }
-                catch (Exception ex)
-                {
-                    Log("Unable to read file: " + ex.Message);
+                    if (voiceStream == null)
+                        voiceStream = audioClient.CreatePCMStream(AudioApplication.Voice, 128 * 1024);
+                    try
+                    {
+                        WaveFileReader wav = new WaveFileReader(path);
+                        WaveFormat waveFormat = new WaveFormat(48000, 16, 2);
+                        WaveStream pcm = WaveFormatConversionStream.CreatePcmStream(wav);
+                        WaveFormatConversionStream output = new WaveFormatConversionStream(waveFormat, pcm);
+                        output.CopyTo(voiceStream);
+                        voiceStream.Flush();
+                    }
+                    catch (Exception ex)
+                    {
+                        Log("Unable to read file: " + ex.Message);
+                    }
                 }
             }
         }

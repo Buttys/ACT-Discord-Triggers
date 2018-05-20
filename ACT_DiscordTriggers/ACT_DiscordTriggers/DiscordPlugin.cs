@@ -38,6 +38,8 @@ namespace ACT_DiscordTriggers
 		private void InitializeComponent() {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.chkfilterdmg = new System.Windows.Forms.CheckBox();
+            this.chkDiscordCommands = new System.Windows.Forms.CheckBox();
             this.chkParseFilter = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
             this.txtFFXIVName = new System.Windows.Forms.TextBox();
@@ -64,6 +66,7 @@ namespace ACT_DiscordTriggers
             this.txtToken = new System.Windows.Forms.TextBox();
             this.lblBotTok = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.TestMapBtn = new System.Windows.Forms.Button();
             this.btnAddTriggers = new System.Windows.Forms.Button();
             this.btnSaveSettings = new System.Windows.Forms.Button();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
@@ -110,6 +113,8 @@ namespace ACT_DiscordTriggers
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.chkfilterdmg);
+            this.tabPage1.Controls.Add(this.chkDiscordCommands);
             this.tabPage1.Controls.Add(this.chkParseFilter);
             this.tabPage1.Controls.Add(this.label3);
             this.tabPage1.Controls.Add(this.txtFFXIVName);
@@ -143,12 +148,36 @@ namespace ACT_DiscordTriggers
             this.tabPage1.Text = "Settings";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // chkfilterdmg
+            // 
+            this.chkfilterdmg.AutoSize = true;
+            this.chkfilterdmg.Checked = true;
+            this.chkfilterdmg.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkfilterdmg.Location = new System.Drawing.Point(657, 95);
+            this.chkfilterdmg.Name = "chkfilterdmg";
+            this.chkfilterdmg.Size = new System.Drawing.Size(125, 17);
+            this.chkfilterdmg.TabIndex = 48;
+            this.chkfilterdmg.Text = "Filter Infinite Damage";
+            this.chkfilterdmg.UseVisualStyleBackColor = true;
+            // 
+            // chkDiscordCommands
+            // 
+            this.chkDiscordCommands.AutoSize = true;
+            this.chkDiscordCommands.Checked = true;
+            this.chkDiscordCommands.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkDiscordCommands.Location = new System.Drawing.Point(657, 23);
+            this.chkDiscordCommands.Name = "chkDiscordCommands";
+            this.chkDiscordCommands.Size = new System.Drawing.Size(153, 17);
+            this.chkDiscordCommands.TabIndex = 47;
+            this.chkDiscordCommands.Text = "Enable Discord Commands";
+            this.chkDiscordCommands.UseVisualStyleBackColor = true;
+            // 
             // chkParseFilter
             // 
             this.chkParseFilter.AutoSize = true;
             this.chkParseFilter.Checked = true;
             this.chkParseFilter.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkParseFilter.Location = new System.Drawing.Point(132, 162);
+            this.chkParseFilter.Location = new System.Drawing.Point(657, 71);
             this.chkParseFilter.Name = "chkParseFilter";
             this.chkParseFilter.Size = new System.Drawing.Size(83, 17);
             this.chkParseFilter.TabIndex = 46;
@@ -191,7 +220,7 @@ namespace ACT_DiscordTriggers
             // chkAutoConnect
             // 
             this.chkAutoConnect.AutoSize = true;
-            this.chkAutoConnect.Location = new System.Drawing.Point(132, 140);
+            this.chkAutoConnect.Location = new System.Drawing.Point(657, 48);
             this.chkAutoConnect.Name = "chkAutoConnect";
             this.chkAutoConnect.Size = new System.Drawing.Size(91, 17);
             this.chkAutoConnect.TabIndex = 41;
@@ -376,6 +405,7 @@ namespace ACT_DiscordTriggers
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.TestMapBtn);
             this.tabPage2.Controls.Add(this.btnAddTriggers);
             this.tabPage2.Controls.Add(this.btnSaveSettings);
             this.tabPage2.Controls.Add(this.groupBox6);
@@ -389,6 +419,16 @@ namespace ACT_DiscordTriggers
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Maps";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // TestMapBtn
+            // 
+            this.TestMapBtn.Location = new System.Drawing.Point(525, 406);
+            this.TestMapBtn.Name = "TestMapBtn";
+            this.TestMapBtn.Size = new System.Drawing.Size(127, 23);
+            this.TestMapBtn.TabIndex = 5;
+            this.TestMapBtn.Text = "Test";
+            this.TestMapBtn.UseVisualStyleBackColor = true;
+            this.TestMapBtn.Click += new System.EventHandler(this.TestMapBtn_Click);
             // 
             // btnAddTriggers
             // 
@@ -447,17 +487,6 @@ namespace ACT_DiscordTriggers
             // 
             this.lstFriends.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lstFriends.FormattingEnabled = true;
-            this.lstFriends.Items.AddRange(new object[] {
-            "Cyther",
-            "Ketzia",
-            "Buttys",
-            "Vivi",
-            "Jadoo",
-            "Bryne",
-            "The Devil Child",
-            "Tryhard",
-            "Bronchy",
-            "Bel Sama"});
             this.lstFriends.Location = new System.Drawing.Point(3, 3);
             this.lstFriends.Name = "lstFriends";
             this.lstFriends.Size = new System.Drawing.Size(155, 347);
@@ -593,45 +622,6 @@ namespace ACT_DiscordTriggers
             // 
             this.lstMapTriggers.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lstMapTriggers.FormattingEnabled = true;
-            this.lstMapTriggers.Items.AddRange(new object[] {
-            "Every door is now {0}.",
-            "My 100 percentile is pointing {0}",
-            "The secret to Buttys healing can be found {0}.",
-            "Sloppy Right.",
-            "Sloppy left",
-            "The sign over there points {0}.",
-            "The future predicts {0}.",
-            "Try hards pants can be found {0}.",
-            "Buttys says {0}.",
-            "My map points {0}.",
-            "If I was to guess wrong, It would be {0}.",
-            "Bel sama o\'clock is {0}.",
-            "If i was a Geordie, I would pick {0}.",
-            "My Lettuce pizza is pointing {0}.",
-            "Vivi says {0}.",
-            "Ketzia is {0}.",
-            "If i was to quit the static... I would go {0}.",
-            "Left sword.",
-            "Right sword.",
-            "Cythers corpse is pointing {0}.",
-            "President Trump says {0}.",
-            "We should build the Mexican wall on the Right.",
-            "We should build the Mexican wall on the Left.",
-            "I used a potion and it said go {0}.",
-            "Ketzia is always right.",
-            "Tell Ketzia we went left",
-            "If Brine was here tonight? I think he would of gone left.",
-            "Screw you guys! I\'m going {0}.",
-            "Buttys did too much dps so we go {0}.",
-            "Anyone that survived can go {0}.",
-            "Bonjour detected! {0} incoming.",
-            "My bucket is leaning {0}.",
-            "This door smells funny, lets go {0}.",
-            "The devil child said go {0}.",
-            "The voices in my head say {0}.",
-            "Mummy Bel, should we go {0}.",
-            "Just like Dark Souls, {0}.",
-            "Zero deaths {0}."});
             this.lstMapTriggers.Location = new System.Drawing.Point(3, 3);
             this.lstMapTriggers.Name = "lstMapTriggers";
             this.lstMapTriggers.Size = new System.Drawing.Size(422, 347);
@@ -728,6 +718,9 @@ namespace ACT_DiscordTriggers
         private Button btnAddTriggers;
         private Button btnSaveSettings;
         private CheckBox chkParseFilter;
+        private CheckBox chkDiscordCommands;
+        private CheckBox chkfilterdmg;
+        private Button TestMapBtn;
         private Random ran = new Random();
 
         #region IActPluginV1 Members
@@ -752,10 +745,13 @@ namespace ACT_DiscordTriggers
             lstMapTriggers.KeyUp += RemoveListItem;
             lstFriends.KeyUp += RemoveListItem;
 
+            chkDiscordCommands.CheckedChanged += ChkDiscordCommands_CheckedChanged;
+
             //Discord Bot Stuff
             DiscordClient.BotReady += BotReady;
             DiscordClient.LoginFail += LoginFail;
             DiscordClient.Log += Log;
+            DiscordClient.EnableCommands(chkDiscordCommands.Checked);
 
             if (chkAutoConnect.Checked)
                 discordConnectbtn_Click(null, EventArgs.Empty);
@@ -764,7 +760,12 @@ namespace ACT_DiscordTriggers
             lblStatus.Text = "Drellis Started";
 		}
 
-		public async void DeInitPlugin() {
+        private void ChkDiscordCommands_CheckedChanged(object sender, EventArgs e)
+        {
+            DiscordClient.EnableCommands(chkDiscordCommands.Checked);
+        }
+
+        public async void DeInitPlugin() {
 			ActGlobals.oFormActMain.PlayTtsMethod = ActGlobals.oFormActMain.TTS;
 			ActGlobals.oFormActMain.PlaySoundMethod = ActGlobals.oFormActMain.PlaySoundWmpApi;
 			SaveSettings();
@@ -1041,6 +1042,10 @@ namespace ACT_DiscordTriggers
                     continue;
                 }
 
+                string dpsString = playerData[i].DPS.ToString();
+
+                if (chkfilterdmg.Checked && (dpsString == "NaN" || ((int)playerData[i].DPS < 0)))
+                    continue;
 
                 if (parselogged != 0)
                     parsedata.AppendLine();
@@ -1048,9 +1053,8 @@ namespace ACT_DiscordTriggers
                 double.TryParse(playerData[i].GetColumnByName("DirectHitPct").TrimEnd(new char[] { '%' }), out double directhit);
                 double.TryParse(playerData[i].GetColumnByName("CritDirectHitPct").TrimEnd(new char[] { '%' }), out double directhitcrt);
 
-                string dpsString = playerData[i].DPS.ToString();
 
-                //parsedata.Append(CreateStringWithSpacing(":" + playerData[i].GetColumnByName("Job").ToLower() + ":", 6));
+                //parsedata.Append(GetJob(playerData[i].GetColumnByName("Job")));
                 parsedata.Append(CreateStringWithSpacing(SplitName(playerData[i].Name == "YOU" ? txtFFXIVName.Text : playerData[i].Name), 10, false));
                 parsedata.Append(CreateStringWithSpacing(Bracket(dpsString == "NaN" || (int)playerData[i].DPS < 0 ? "∞" : ((int)playerData[i].DPS).ToString()), 8));
                 parsedata.Append(CreateStringWithSpacing(Bracket(((int)playerData[i].CritDamPerc).ToString() + "%"), 6));
@@ -1140,6 +1144,9 @@ namespace ACT_DiscordTriggers
             xmlSettings.AddControlSetting(lstThreeDirections.Name, lstThreeDirections);
             xmlSettings.AddControlSetting(lstMapTriggers.Name, lstMapTriggers);
             xmlSettings.AddControlSetting(lstFriends.Name, lstFriends);
+            xmlSettings.AddControlSetting(chkDiscordCommands.Name, chkDiscordCommands);
+            xmlSettings.AddControlSetting(chkfilterdmg.Name, chkfilterdmg);
+
             if (File.Exists(settingsFile)) {
 				FileStream fs = new FileStream(settingsFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 				XmlTextReader xReader = new XmlTextReader(fs);
@@ -1242,15 +1249,22 @@ namespace ACT_DiscordTriggers
 
         private void btnAddTriggers_Click(object sender, EventArgs e)
         {
-            ActGlobals.oFormActMain.AddEditCustomTrigger(new CustomTrigger("A teleportation ward leading into the Hidden Canals of Uznair has appeared.", 3 , "canalhard", false,string.Empty,false));
-            ActGlobals.oFormActMain.AddEditCustomTrigger(new CustomTrigger("A teleportation ward leading into the Lost Canals of Uznair has appeared.", 3, "canalnormal", false, string.Empty, false));
-            ActGlobals.oFormActMain.AddEditCustomTrigger(new CustomTrigger("The Hidden Canals of Uznair has ended.", 3, "canalend", false, string.Empty, false));
-            ActGlobals.oFormActMain.AddEditCustomTrigger(new CustomTrigger("The Lost Canals of Uznair has ended.", 3, "canalend", false, string.Empty, false));
-            ActGlobals.oFormActMain.AddEditCustomTrigger(new CustomTrigger("You obtain a vault key.", 3, "canalkey", false, string.Empty, false));
-            ActGlobals.oFormActMain.AddEditCustomTrigger(new CustomTrigger("(?<first>\\w+) (?<last>\\w+) use Dig.", 3, "#${first}", false, string.Empty, false));
-            ActGlobals.oFormActMain.AddEditCustomTrigger(new CustomTrigger("(?<first>\\w+) (?<last>\\w+) uses Dig.", 3, "#${first}", false, string.Empty, false));
+            ActGlobals.oFormActMain.AddEditCustomTrigger(CreateTrigger("A teleportation ward leading into the Hidden Canals of Uznair has appeared.", "canalhard"));
+            ActGlobals.oFormActMain.AddEditCustomTrigger(CreateTrigger("A teleportation ward leading into the Lost Canals of Uznair has appeared.", "canalnormal"));
+            ActGlobals.oFormActMain.AddEditCustomTrigger(CreateTrigger("The Hidden Canals of Uznair has ended.", "canalend"));
+            ActGlobals.oFormActMain.AddEditCustomTrigger(CreateTrigger("The Lost Canals of Uznair has ended.", "canalend"));
+            ActGlobals.oFormActMain.AddEditCustomTrigger(CreateTrigger("You obtain a vault key.", "canalkey"));
+            ActGlobals.oFormActMain.AddEditCustomTrigger(CreateTrigger("(?<first>\\w+) (?<last>\\w+) use Dig.", "#${first}"));
+            ActGlobals.oFormActMain.AddEditCustomTrigger(CreateTrigger("(?<first>\\w+) (?<last>\\w+) uses Dig.", "#${first}"));
+            ActGlobals.oFormActMain.AddEditCustomTrigger(CreateTrigger("A Namazu stickywhisker appears!", "A wild Sticky Wisker has spawned!"));
+            ActGlobals.oFormActMain.AddEditCustomTrigger(CreateTrigger("Abharamu appears!", "A wild Abharamu has spawned!"));
             SaveSettings();
             MessageBox.Show("Triggers Added.");
+        }
+
+        private CustomTrigger CreateTrigger(string trigger,string texttospeech, string category = "Map Triggers")
+        {
+            return new CustomTrigger(trigger, 3, texttospeech, false, string.Empty, false) { Category = category };
         }
 
         private void btnSaveSettings_Click(object sender, EventArgs e)
@@ -1259,6 +1273,14 @@ namespace ACT_DiscordTriggers
                 MessageBox.Show("Saved.");
             else
                 MessageBox.Show("Failed to save.");
+        }
+
+        private void TestMapBtn_Click(object sender, EventArgs e)
+        {
+            string q = lstMapTriggers.SelectedItem != null ? lstMapTriggers.SelectedItem.ToString() : lstMapTriggers.Items[ran.Next(lstMapTriggers.Items.Count)].ToString();
+            string f = lstFriends.Items[ran.Next(lstFriends.Items.Count)].ToString();
+
+            speak(string.Format(q, PickDirection(), f));
         }
     }
 }

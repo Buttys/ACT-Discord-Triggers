@@ -63,45 +63,6 @@ namespace DiscordAPI
             return value.Substring(adjustedPosA, posB);
         }
 
-        private static string GetClass(string name)
-        {
-            switch (name)
-            {
-                case "WhiteMage":
-                    return "<:whm:343479909160583168>";
-                case "Astrologian":
-                    return "<:ast:343479455005540353>";
-                case "Scholar":
-                    return "<:sch:343479909236080640>";
-                case "Paladin":
-                    return "<:pld:343479908854661121>";
-                case "Warrior":
-                    return "<:war:343479908879826945>";
-                case "DarkKnight":
-                    return "<:drk:343479908980359168>";
-                case "Bard":
-                    return "<:brd:343479908757929995>";
-                case "Machinist":
-                    return "<:mch:343479908879826955>";
-                case "BlackMage":
-                    return "<:blm:343479267394322433>";
-                case "RedMage":
-                    return "<:rdm:343479908741283852>";
-                case "Summoner":
-                    return "<:smn:343479908900667394>";
-                case "Dragoon":
-                    return "<:drg:343479908632231937>";
-                case "Monk":
-                    return "<:mnk:343479908980228106>";
-                case "Ninja":
-                    return "<:nin:343479908850466818>";
-                case "Samurai":
-                    return "<:sam:343479909043273730>";
-                default:
-                    return ":poop:";
-            }
-        }
-
         [Command("fflogs")]
         [Summary("Drellis speciality")]
         public async Task Fflogs(string server, [Remainder] string name)
@@ -196,10 +157,13 @@ namespace DiscordAPI
 
             foreach (Parses parse in parses)
             {
-                des.AppendLine($"__**{parse.Name}**__");
+                int kills = 0;
+                foreach (var spec in parse.Specs)
+                    kills += spec.Data.Count;
+                des.AppendLine($"__**{parse.Name} - Kills : {kills}**__");
                 foreach (var spec in parse.Specs)
                 {
-                    des.AppendLine($"{GetClass(spec.spec)} DPS <{string.Format("{0:0.#}", spec.Best_Persecondamount)}> Top <{string.Format("{0:0.#}", spec.Best_Historical_Percent)}%> Avg <{string.Format("{0:0.#}", spec.Historical_Median)}%> Kills <{spec.Data.Count}>");
+                    des.AppendLine($"{GetJob(spec.spec)} Highest DPS <{string.Format("{0:0.#}", spec.Best_Persecondamount)}> Percentile Avg <{string.Format("{0:0.#}", spec.Historical_Median)}-{string.Format("{0:0.#}", spec.Best_Historical_Percent)}%>");
                 }
             }
 
@@ -215,6 +179,45 @@ namespace DiscordAPI
             .Build();
 
             await Context.Channel.SendMessageAsync("", embed: embed);
+        }
+
+        private static string GetJob(string name)
+        {
+            switch (name)
+            {
+                case "WhiteMage":
+                    return "<:whm:343479909160583168>";
+                case "Astrologian":
+                    return "<:ast:343479455005540353>";
+                case "Scholar":
+                    return "<:sch:343479909236080640>";
+                case "Paladin":
+                    return "<:pld:343479908854661121>";
+                case "Warrior":
+                    return "<:war:343479908879826945>";
+                case "DarkKnight":
+                    return "<:drk:343479908980359168>";
+                case "Bard":
+                    return "<:brd:343479908757929995>";
+                case "Machinist":
+                    return "<:mch:343479908879826955>";
+                case "BlackMage":
+                    return "<:blm:343479267394322433>";
+                case "RedMage":
+                    return "<:rdm:343479908741283852>";
+                case "Summoner":
+                    return "<:smn:343479908900667394>";
+                case "Dragoon":
+                    return "<:drg:343479908632231937>";
+                case "Monk":
+                    return "<:mnk:343479908980228106>";
+                case "Ninja":
+                    return "<:nin:343479908850466818>";
+                case "Samurai":
+                    return "<:sam:343479909043273730>";
+                default:
+                    return ":poop:";
+            }
         }
 
         [Command("status")]
