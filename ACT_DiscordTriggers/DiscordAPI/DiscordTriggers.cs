@@ -9,7 +9,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using XivDB;
 
 namespace DiscordAPI
 {
@@ -29,13 +28,9 @@ namespace DiscordAPI
         {
             try
             {
-                var url = new Uri(link);
-                HttpClient client = NewClient();
-
-                string responseBody = await client.GetStringAsync(url);
-
-                string charname = Between(responseBody, "<div id=\"character-name\">", "</div>");
-                string charserver = Between(responseBody,string.Format("<a id=\"server-link\" href=\"/servers/{0}\">", Between(responseBody,"<a id=\"server-link\" href=\"/servers/", "\">")), "</a>");
+                string[] parts = link.Split('/');
+                string charname = parts[6].Replace("%20"," ");
+                string charserver = parts[5];
 
                 await getFFLogs(charserver, charname, Context);
             }
@@ -91,32 +86,14 @@ namespace DiscordAPI
                               select wrld;
             var world = worldResult.First();
 
-            var url = new Uri($"https://api.xivdb.com/search?one=characters&string={character}&pretty=1");
+
+
+
+
+            var url = new Uri($"https://www.fflogs.com/v1/parses/character/{character}/{world.Name}/{world.Region}/?api_key={DiscordClient.FFLogsToken}");
             HttpClient client = NewClient();
+            string responseBody;
 
-            string responseBody = await client.GetStringAsync(url);
-            var xivdbCharacters = JsonConvert.DeserializeObject<CharacterSearch>(responseBody);
-
-            var results = from charResult in xivdbCharacters.Characters.Results
-                          where charResult.Name.ToLower() == character.ToLower() && charResult.Server == server
-                          select charResult;
-
-            string playerLink = "";
-            string playerDB = "";
-            XIVDBCharacter xivdbCharacter = null;
-            if (results.Count() > 0)
-            {
-                playerLink = results.First().Url_api;
-                playerDB = results.First().Url_xivdb;
-
-                url = new Uri(playerLink);
-                responseBody = await client.GetStringAsync(url);
-                xivdbCharacter = JsonConvert.DeserializeObject<XIVDBCharacter>(responseBody);
-            }
-
-
-
-            url = new Uri($"https://www.fflogs.com/v1/parses/character/{character}/{world.Name}/{world.Region}/?api_key={DiscordClient.FFLogsToken}");
             try
             {
                 responseBody = await client.GetStringAsync(url);
@@ -137,43 +114,67 @@ namespace DiscordAPI
                 await Context.Channel.SendMessageAsync($"Hidden parses detected, {character} is a scrub.");
                 return;
             }
-            string id = "0";
-            if (parses.Count > 0)
-            {
-                if (parses[0].Specs.Count > 0)
-                {
-                    foreach (DatumFight data in parses[0].Specs[0].Data)
-                    {
-                        if (data.character_name == character)
-                            id = data.character_id.ToString();
-                    }
-                }
-            }
 
             StringBuilder des = new StringBuilder();
 
             if (parses.Count == 0)
                 des.AppendLine("No encounters found.");
 
+
+            Dictionary<string, List<Parses>> parseData = new Dictionary<string, List<Parses>>();
+
             foreach (Parses parse in parses)
             {
-                int kills = 0;
-                foreach (var spec in parse.Specs)
-                    kills += spec.Data.Count;
-                des.AppendLine($"__**{parse.Name} - Kills : {kills}**__");
-                foreach (var spec in parse.Specs)
+                if (parseData.ContainsKey(parse.encounterName))
+                    parseData[parse.encounterName].Add(parse);
+                else
+                    parseData.Add(parse.encounterName, new List<Parses> { parse });
+            }
+
+            foreach(string key in parseData.Keys)
+            {
+                des.AppendLine($"__**{key} - Kills : {parseData[key].Count}**__");
+                Dictionary<string, List<Parses>> classData = new Dictionary<string, List<Parses>>();
+                foreach(Parses parse in parseData[key])
                 {
-                    des.AppendLine($"{GetJob(spec.spec)} Highest DPS <{string.Format("{0:0.#}", spec.Best_Persecondamount)}> Percentile Avg <{string.Format("{0:0.#}", spec.Historical_Median)}-{string.Format("{0:0.#}", spec.Best_Historical_Percent)}%>");
+                    if (classData.ContainsKey(parse.spec))
+                        classData[parse.spec].Add(parse);
+                    else
+                        classData.Add(parse.spec, new List<Parses> { parse });
+                }
+
+                foreach(string spec in classData.Keys)
+                {
+                    int highestPercentile = 0;
+                    int avgPercentile = 0;
+                    int bestRank = 0;
+                    int outOf = 0;
+                    foreach(Parses parse in classData[spec])
+                    {
+                        if (parse.percentile > highestPercentile)
+                            highestPercentile = parse.percentile;
+                        if (parse.rank < bestRank || bestRank == 0)
+                            bestRank = parse.rank;
+                        if (parse.outOf > outOf)
+                            outOf = parse.outOf;
+                        avgPercentile += parse.percentile;
+                    }
+                    if (classData[spec].Count > 0)
+                    {
+                        avgPercentile = avgPercentile / classData[spec].Count;
+                        des.AppendLine($"{GetJob(spec)} Percentile <{string.Format("{0:0.#}", avgPercentile)}-{string.Format("{0:0.#}", highestPercentile)}%> Rank - {bestRank} of {outOf}");
+                    }
                 }
             }
+            
 
             var embed = new EmbedBuilder()
             .WithTitle($"Click Here - FFLogs Info")
-            .WithUrl($"https://www.fflogs.com/character/id/{id}")
-            .WithThumbnailUrl(xivdbCharacter == null ? "" : xivdbCharacter.Avatar)
+            .WithUrl($"https://www.fflogs.com/character/eu/lich/{name.Replace(" ","%20")}")
+            //.WithThumbnailUrl(xivdbCharacter == null ? "" : xivdbCharacter.Avatar)
             //.WithImageUrl(xivdbCharacter == null ? "" : xivdbCharacter.portrait)
             .WithFooter(new EmbedFooterBuilder()
-            .WithText($"{character} - {world.Name} - {world.Region} | {(xivdbCharacter == null ? "Unknown" : xivdbCharacter.Data.race)}"))
+            .WithText($"{character} - {world.Name} - {world.Region}")) //| {(xivdbCharacter == null ? "Unknown" : xivdbCharacter.Data.race)}"))
             .WithColor(new Color(102, 255, 222))
             .WithDescription(des.ToString())
             .Build();
@@ -185,7 +186,7 @@ namespace DiscordAPI
         {
             switch (name)
             {
-                case "WhiteMage":
+                case "White Mage":
                     return "<:whm:343479909160583168>";
                 case "Astrologian":
                     return "<:ast:343479455005540353>";
@@ -195,15 +196,15 @@ namespace DiscordAPI
                     return "<:pld:343479908854661121>";
                 case "Warrior":
                     return "<:war:343479908879826945>";
-                case "DarkKnight":
+                case "Dark Knight":
                     return "<:drk:343479908980359168>";
                 case "Bard":
                     return "<:brd:343479908757929995>";
                 case "Machinist":
                     return "<:mch:343479908879826955>";
-                case "BlackMage":
+                case "Black Mage":
                     return "<:blm:343479267394322433>";
-                case "RedMage":
+                case "Red Mage":
                     return "<:rdm:343479908741283852>";
                 case "Summoner":
                     return "<:smn:343479908900667394>";

@@ -213,17 +213,17 @@ namespace DiscordAPI
         {
             SocketUserMessage msg = arg as SocketUserMessage;
 
-            if (msg == null)
+            if (msg == null || msg.Author.IsBot)
                 return;
 
             int pos = 0;
 
             var content = new CommandContext(bot, msg);
 
-            if (msg.Content.Contains("https://www.fflogs.com/character/id/"))
+            if (msg.Content.Contains("https://www.fflogs.com/character/"))
             {
 
-                Regex urlRx = new Regex(@"(?<url>(http:|https:[/][/]|www.)([a-z]|[A-Z]|[0-9]|[/.]|[~])*)", RegexOptions.IgnoreCase);
+                Regex urlRx = new Regex(@"(?<url>(http:|https:[/][/]|www.)([a-z]|[A-Z]|[0-9]|[/.]|[~]|[%])*)", RegexOptions.IgnoreCase);
 
                 MatchCollection matches = urlRx.Matches(msg.Content);
                 foreach (Match match in matches)
