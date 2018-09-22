@@ -38,6 +38,11 @@ namespace ACT_DiscordTriggers
 		private void InitializeComponent() {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.btnSetStatus = new System.Windows.Forms.Button();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+            this.txtStatus = new System.Windows.Forms.TextBox();
+            this.lstStatus = new System.Windows.Forms.ListBox();
             this.chkfilterdmg = new System.Windows.Forms.CheckBox();
             this.chkDiscordCommands = new System.Windows.Forms.CheckBox();
             this.chkParseFilter = new System.Windows.Forms.CheckBox();
@@ -66,6 +71,10 @@ namespace ACT_DiscordTriggers
             this.txtToken = new System.Windows.Forms.TextBox();
             this.lblBotTok = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+            this.txtAltarTrigger = new System.Windows.Forms.TextBox();
+            this.lstAltarTriggers = new System.Windows.Forms.ListBox();
             this.TestMapBtn = new System.Windows.Forms.Button();
             this.btnAddTriggers = new System.Windows.Forms.Button();
             this.btnSaveSettings = new System.Windows.Forms.Button();
@@ -85,11 +94,16 @@ namespace ACT_DiscordTriggers
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.txtTrigger = new System.Windows.Forms.TextBox();
             this.lstMapTriggers = new System.Windows.Forms.ListBox();
+            this.chkShowtext = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.tableLayoutPanel6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sliderTTSSpeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sliderTTSVol)).BeginInit();
             this.tabPage2.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.tableLayoutPanel5.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -108,11 +122,14 @@ namespace ACT_DiscordTriggers
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(833, 502);
+            this.tabControl1.Size = new System.Drawing.Size(945, 502);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.chkShowtext);
+            this.tabPage1.Controls.Add(this.btnSetStatus);
+            this.tabPage1.Controls.Add(this.groupBox2);
             this.tabPage1.Controls.Add(this.chkfilterdmg);
             this.tabPage1.Controls.Add(this.chkDiscordCommands);
             this.tabPage1.Controls.Add(this.chkParseFilter);
@@ -143,10 +160,64 @@ namespace ACT_DiscordTriggers
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(825, 476);
+            this.tabPage1.Size = new System.Drawing.Size(937, 476);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Settings";
+            this.tabPage1.Text = "Discord Settings";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // btnSetStatus
+            // 
+            this.btnSetStatus.Enabled = false;
+            this.btnSetStatus.Location = new System.Drawing.Point(805, 438);
+            this.btnSetStatus.Name = "btnSetStatus";
+            this.btnSetStatus.Size = new System.Drawing.Size(94, 23);
+            this.btnSetStatus.TabIndex = 50;
+            this.btnSetStatus.Text = "Update";
+            this.btnSetStatus.UseVisualStyleBackColor = true;
+            this.btnSetStatus.Click += new System.EventHandler(this.btnSetStatus_Click);
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.tableLayoutPanel6);
+            this.groupBox2.Location = new System.Drawing.Point(770, 181);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(161, 251);
+            this.groupBox2.TabIndex = 49;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Discord Status";
+            // 
+            // tableLayoutPanel6
+            // 
+            this.tableLayoutPanel6.ColumnCount = 1;
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel6.Controls.Add(this.txtStatus, 0, 1);
+            this.tableLayoutPanel6.Controls.Add(this.lstStatus, 0, 0);
+            this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 16);
+            this.tableLayoutPanel6.Name = "tableLayoutPanel6";
+            this.tableLayoutPanel6.RowCount = 2;
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(155, 232);
+            this.tableLayoutPanel6.TabIndex = 0;
+            // 
+            // txtStatus
+            // 
+            this.txtStatus.Dock = System.Windows.Forms.DockStyle.Top;
+            this.txtStatus.Location = new System.Drawing.Point(3, 212);
+            this.txtStatus.Name = "txtStatus";
+            this.txtStatus.Size = new System.Drawing.Size(149, 20);
+            this.txtStatus.TabIndex = 0;
+            // 
+            // lstStatus
+            // 
+            this.lstStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lstStatus.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lstStatus.FormattingEnabled = true;
+            this.lstStatus.Location = new System.Drawing.Point(3, 3);
+            this.lstStatus.Name = "lstStatus";
+            this.lstStatus.Size = new System.Drawing.Size(149, 203);
+            this.lstStatus.TabIndex = 1;
             // 
             // chkfilterdmg
             // 
@@ -383,7 +454,7 @@ namespace ACT_DiscordTriggers
             this.logBox.Multiline = true;
             this.logBox.Name = "logBox";
             this.logBox.ReadOnly = true;
-            this.logBox.Size = new System.Drawing.Size(789, 276);
+            this.logBox.Size = new System.Drawing.Size(734, 276);
             this.logBox.TabIndex = 24;
             // 
             // txtToken
@@ -405,6 +476,7 @@ namespace ACT_DiscordTriggers
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.groupBox1);
             this.tabPage2.Controls.Add(this.TestMapBtn);
             this.tabPage2.Controls.Add(this.btnAddTriggers);
             this.tabPage2.Controls.Add(this.btnSaveSettings);
@@ -415,14 +487,56 @@ namespace ACT_DiscordTriggers
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(825, 476);
+            this.tabPage2.Size = new System.Drawing.Size(937, 476);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Maps";
+            this.tabPage2.Text = "Map Triggers";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.tableLayoutPanel5);
+            this.groupBox1.Location = new System.Drawing.Point(747, 8);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(177, 397);
+            this.groupBox1.TabIndex = 6;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Shifting Altar Triggers";
+            // 
+            // tableLayoutPanel5
+            // 
+            this.tableLayoutPanel5.ColumnCount = 1;
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel5.Controls.Add(this.txtAltarTrigger, 0, 1);
+            this.tableLayoutPanel5.Controls.Add(this.lstAltarTriggers, 0, 0);
+            this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 16);
+            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
+            this.tableLayoutPanel5.RowCount = 2;
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(171, 378);
+            this.tableLayoutPanel5.TabIndex = 1;
+            // 
+            // txtAltarTrigger
+            // 
+            this.txtAltarTrigger.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtAltarTrigger.Location = new System.Drawing.Point(3, 356);
+            this.txtAltarTrigger.Name = "txtAltarTrigger";
+            this.txtAltarTrigger.Size = new System.Drawing.Size(165, 20);
+            this.txtAltarTrigger.TabIndex = 0;
+            // 
+            // lstAltarTriggers
+            // 
+            this.lstAltarTriggers.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lstAltarTriggers.FormattingEnabled = true;
+            this.lstAltarTriggers.Location = new System.Drawing.Point(3, 3);
+            this.lstAltarTriggers.Name = "lstAltarTriggers";
+            this.lstAltarTriggers.Size = new System.Drawing.Size(165, 347);
+            this.lstAltarTriggers.TabIndex = 1;
             // 
             // TestMapBtn
             // 
-            this.TestMapBtn.Location = new System.Drawing.Point(525, 406);
+            this.TestMapBtn.Location = new System.Drawing.Point(630, 406);
             this.TestMapBtn.Name = "TestMapBtn";
             this.TestMapBtn.Size = new System.Drawing.Size(127, 23);
             this.TestMapBtn.TabIndex = 5;
@@ -432,7 +546,7 @@ namespace ACT_DiscordTriggers
             // 
             // btnAddTriggers
             // 
-            this.btnAddTriggers.Location = new System.Drawing.Point(658, 407);
+            this.btnAddTriggers.Location = new System.Drawing.Point(763, 407);
             this.btnAddTriggers.Name = "btnAddTriggers";
             this.btnAddTriggers.Size = new System.Drawing.Size(155, 23);
             this.btnAddTriggers.TabIndex = 4;
@@ -442,7 +556,7 @@ namespace ACT_DiscordTriggers
             // 
             // btnSaveSettings
             // 
-            this.btnSaveSettings.Location = new System.Drawing.Point(658, 436);
+            this.btnSaveSettings.Location = new System.Drawing.Point(763, 436);
             this.btnSaveSettings.Name = "btnSaveSettings";
             this.btnSaveSettings.Size = new System.Drawing.Size(155, 23);
             this.btnSaveSettings.TabIndex = 3;
@@ -453,12 +567,12 @@ namespace ACT_DiscordTriggers
             // groupBox6
             // 
             this.groupBox6.Controls.Add(this.tableLayoutPanel4);
-            this.groupBox6.Location = new System.Drawing.Point(652, 7);
+            this.groupBox6.Location = new System.Drawing.Point(6, 8);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(167, 397);
             this.groupBox6.TabIndex = 2;
             this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "Friend List";
+            this.groupBox6.Text = "Friend List {1}";
             // 
             // tableLayoutPanel4
             // 
@@ -495,12 +609,12 @@ namespace ACT_DiscordTriggers
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.tableLayoutPanel2);
-            this.groupBox5.Location = new System.Drawing.Point(9, 208);
+            this.groupBox5.Location = new System.Drawing.Point(586, 209);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(200, 196);
+            this.groupBox5.Size = new System.Drawing.Size(158, 196);
             this.groupBox5.TabIndex = 2;
             this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Directions (Three Doors)";
+            this.groupBox5.Text = "Directions (Three Doors) {0}";
             // 
             // tableLayoutPanel2
             // 
@@ -514,7 +628,7 @@ namespace ACT_DiscordTriggers
             this.tableLayoutPanel2.RowCount = 2;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(194, 177);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(152, 177);
             this.tableLayoutPanel2.TabIndex = 1;
             // 
             // txtDirThree
@@ -522,7 +636,7 @@ namespace ACT_DiscordTriggers
             this.txtDirThree.Dock = System.Windows.Forms.DockStyle.Top;
             this.txtDirThree.Location = new System.Drawing.Point(3, 155);
             this.txtDirThree.Name = "txtDirThree";
-            this.txtDirThree.Size = new System.Drawing.Size(188, 20);
+            this.txtDirThree.Size = new System.Drawing.Size(146, 20);
             this.txtDirThree.TabIndex = 0;
             // 
             // lstThreeDirections
@@ -536,18 +650,18 @@ namespace ACT_DiscordTriggers
             "to the Right"});
             this.lstThreeDirections.Location = new System.Drawing.Point(3, 3);
             this.lstThreeDirections.Name = "lstThreeDirections";
-            this.lstThreeDirections.Size = new System.Drawing.Size(188, 146);
+            this.lstThreeDirections.Size = new System.Drawing.Size(146, 146);
             this.lstThreeDirections.TabIndex = 1;
             // 
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.tableLayoutPanel1);
-            this.groupBox4.Location = new System.Drawing.Point(6, 6);
+            this.groupBox4.Location = new System.Drawing.Point(583, 7);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(200, 196);
+            this.groupBox4.Size = new System.Drawing.Size(161, 196);
             this.groupBox4.TabIndex = 1;
             this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Directions (Two Doors)";
+            this.groupBox4.Text = "Directions (Two Doors) {0}";
             // 
             // tableLayoutPanel1
             // 
@@ -561,7 +675,7 @@ namespace ACT_DiscordTriggers
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(194, 177);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(155, 177);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // txtDirTwo
@@ -569,7 +683,7 @@ namespace ACT_DiscordTriggers
             this.txtDirTwo.Dock = System.Windows.Forms.DockStyle.Top;
             this.txtDirTwo.Location = new System.Drawing.Point(3, 157);
             this.txtDirTwo.Name = "txtDirTwo";
-            this.txtDirTwo.Size = new System.Drawing.Size(188, 20);
+            this.txtDirTwo.Size = new System.Drawing.Size(149, 20);
             this.txtDirTwo.TabIndex = 0;
             // 
             // lstTwoDirections
@@ -582,18 +696,18 @@ namespace ACT_DiscordTriggers
             "to the Right"});
             this.lstTwoDirections.Location = new System.Drawing.Point(3, 3);
             this.lstTwoDirections.Name = "lstTwoDirections";
-            this.lstTwoDirections.Size = new System.Drawing.Size(188, 148);
+            this.lstTwoDirections.Size = new System.Drawing.Size(149, 148);
             this.lstTwoDirections.TabIndex = 1;
             // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.tableLayoutPanel3);
-            this.groupBox3.Location = new System.Drawing.Point(212, 6);
+            this.groupBox3.Location = new System.Drawing.Point(179, 8);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(434, 397);
+            this.groupBox3.Size = new System.Drawing.Size(401, 397);
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Triggers";
+            this.groupBox3.Text = "Door Triggers";
             // 
             // tableLayoutPanel3
             // 
@@ -607,7 +721,7 @@ namespace ACT_DiscordTriggers
             this.tableLayoutPanel3.RowCount = 2;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(428, 378);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(395, 378);
             this.tableLayoutPanel3.TabIndex = 1;
             // 
             // txtTrigger
@@ -615,7 +729,7 @@ namespace ACT_DiscordTriggers
             this.txtTrigger.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtTrigger.Location = new System.Drawing.Point(3, 356);
             this.txtTrigger.Name = "txtTrigger";
-            this.txtTrigger.Size = new System.Drawing.Size(422, 20);
+            this.txtTrigger.Size = new System.Drawing.Size(389, 20);
             this.txtTrigger.TabIndex = 0;
             // 
             // lstMapTriggers
@@ -624,8 +738,18 @@ namespace ACT_DiscordTriggers
             this.lstMapTriggers.FormattingEnabled = true;
             this.lstMapTriggers.Location = new System.Drawing.Point(3, 3);
             this.lstMapTriggers.Name = "lstMapTriggers";
-            this.lstMapTriggers.Size = new System.Drawing.Size(422, 347);
+            this.lstMapTriggers.Size = new System.Drawing.Size(389, 347);
             this.lstMapTriggers.TabIndex = 1;
+            // 
+            // chkShowtext
+            // 
+            this.chkShowtext.AutoSize = true;
+            this.chkShowtext.Location = new System.Drawing.Point(129, 140);
+            this.chkShowtext.Name = "chkShowtext";
+            this.chkShowtext.Size = new System.Drawing.Size(92, 17);
+            this.chkShowtext.TabIndex = 51;
+            this.chkShowtext.Text = "Show Tokens";
+            this.chkShowtext.UseVisualStyleBackColor = true;
             // 
             // DiscordPlugin
             // 
@@ -633,13 +757,19 @@ namespace ACT_DiscordTriggers
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tabControl1);
             this.Name = "DiscordPlugin";
-            this.Size = new System.Drawing.Size(833, 502);
+            this.Size = new System.Drawing.Size(945, 502);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.tableLayoutPanel6.ResumeLayout(false);
+            this.tableLayoutPanel6.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sliderTTSSpeed)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sliderTTSVol)).EndInit();
             this.tabPage2.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.tableLayoutPanel5.ResumeLayout(false);
+            this.tableLayoutPanel5.PerformLayout();
             this.groupBox6.ResumeLayout(false);
             this.tableLayoutPanel4.ResumeLayout(false);
             this.tableLayoutPanel4.PerformLayout();
@@ -721,6 +851,16 @@ namespace ACT_DiscordTriggers
         private CheckBox chkDiscordCommands;
         private CheckBox chkfilterdmg;
         private Button TestMapBtn;
+        private GroupBox groupBox1;
+        private TableLayoutPanel tableLayoutPanel5;
+        private TextBox txtAltarTrigger;
+        private ListBox lstAltarTriggers;
+        private GroupBox groupBox2;
+        private TableLayoutPanel tableLayoutPanel6;
+        private TextBox txtStatus;
+        private ListBox lstStatus;
+        private Button btnSetStatus;
+        private CheckBox chkShowtext;
         private Random ran = new Random();
 
         #region IActPluginV1 Members
@@ -737,6 +877,8 @@ namespace ACT_DiscordTriggers
             txtDirThree.KeyUp += AddNewListItem;
             txtTrigger.KeyUp += AddNewListItem;
             txtFriend.KeyUp += AddNewListItem;
+            txtAltarTrigger.KeyUp += AddNewListItem;
+            txtStatus.KeyUp += AddNewListItem;
 
             txtFFLogsToken.TextChanged += UpdateToken;
 
@@ -744,8 +886,11 @@ namespace ACT_DiscordTriggers
             lstThreeDirections.KeyUp += RemoveListItem;
             lstMapTriggers.KeyUp += RemoveListItem;
             lstFriends.KeyUp += RemoveListItem;
+            lstAltarTriggers.KeyUp += RemoveListItem;
+            lstStatus.KeyUp += RemoveListItem;
 
             chkDiscordCommands.CheckedChanged += ChkDiscordCommands_CheckedChanged;
+            chkShowtext.CheckedChanged += ChkShowtext_CheckedChanged;
 
             //Discord Bot Stuff
             DiscordClient.BotReady += BotReady;
@@ -763,6 +908,12 @@ namespace ACT_DiscordTriggers
         private void ChkDiscordCommands_CheckedChanged(object sender, EventArgs e)
         {
             DiscordClient.EnableCommands(chkDiscordCommands.Checked);
+        }
+        private void ChkShowtext_CheckedChanged(object sender, EventArgs e)
+        {
+            txtDiscordID.UseSystemPasswordChar = !chkShowtext.Checked;
+            txtFFLogsToken.UseSystemPasswordChar = !chkShowtext.Checked;
+            txtToken.UseSystemPasswordChar = !chkShowtext.Checked;
         }
 
         public async void DeInitPlugin() {
@@ -816,7 +967,9 @@ namespace ACT_DiscordTriggers
             ActGlobals.oFormActMain.OnCombatEnd += OFormActMain_OnCombatEnd;
             Log("Connected to Discord.");
             btnJoin.Enabled = true;
+            btnSetStatus.Enabled = true;
             populateServers();
+            SetGameAsync(GetRandomStatus());
         }
 
         private void LoginFail()
@@ -938,18 +1091,25 @@ namespace ACT_DiscordTriggers
                     case "canalkey":
                         text = CreateQoute();
                         break;
+                    case "portalspawned":
+                        text = string.Format("A portal to {0}'s hole has opened.", activePlayer);
+                        break;
                     case "canalnormal":
                         normalCanals = true;
                         SetGameAsync(string.Format("in {0}'s hole", activePlayer));
-                        text = string.Format("A portal to {0}'s hole has opened.", activePlayer);
-                        break;
+                        return;
                     case "canalhard":
                         normalCanals = false;
                         SetGameAsync(string.Format("in {0}'s secret hole", activePlayer));
-                        text = string.Format("A portal to {0}'s secret hole has opened.", activePlayer);
+                        return;
+                    case "canalspin":
+                        SetGameAsync(string.Format("in {0}'s hole of surprises", activePlayer));
+                        return;
+                    case "wheelspin":
+                        text = string.Format("Time to spin {0}'s... {1}.", activePlayer, SpinToWin());
                         break;
                     case "canalend":
-                        SetGameAsync(gameStatus[ran.Next(gameStatus.Length)]);
+                        SetGameAsync(GetRandomStatus());
                         return;
                 }
 
@@ -960,15 +1120,6 @@ namespace ACT_DiscordTriggers
                 Log(ex.Message);
             }
         }
-
-        private string[] gameStatus = new string[]
-        {
-            "with ACT Triggers",
-            "with Trains",
-            "with Pure Competence",
-            "with Namazu Knights",
-            "FINAL FANTASY XIV - STORMSBLOOD"
-        };
 
         public void SetGameAsync(string text)
         {
@@ -987,6 +1138,30 @@ namespace ACT_DiscordTriggers
             catch
             {
                 return "Looks like i can't find the door.";
+            }
+        }
+
+        public string SpinToWin()
+        {
+            try
+            {
+                return lstAltarTriggers.Items[ran.Next(lstAltarTriggers.Items.Count)].ToString();
+            }
+            catch
+            {
+                return "hole";
+            }
+        }
+
+        public string GetRandomStatus()
+        {
+            try
+            {
+                return lstStatus.Items[ran.Next(lstStatus.Items.Count)].ToString();
+            }
+            catch
+            {
+                return "with ACT Triggers";
             }
         }
 
@@ -1144,6 +1319,8 @@ namespace ACT_DiscordTriggers
             xmlSettings.AddControlSetting(lstThreeDirections.Name, lstThreeDirections);
             xmlSettings.AddControlSetting(lstMapTriggers.Name, lstMapTriggers);
             xmlSettings.AddControlSetting(lstFriends.Name, lstFriends);
+            xmlSettings.AddControlSetting(lstAltarTriggers.Name, lstAltarTriggers);
+            xmlSettings.AddControlSetting(lstStatus.Name, lstStatus);
             xmlSettings.AddControlSetting(chkDiscordCommands.Name, chkDiscordCommands);
             xmlSettings.AddControlSetting(chkfilterdmg.Name, chkfilterdmg);
 
@@ -1211,6 +1388,7 @@ namespace ACT_DiscordTriggers
 
             if (string.IsNullOrWhiteSpace(txt.Text))
                 return;
+                
 
             switch(txt.Name)
             {
@@ -1225,6 +1403,12 @@ namespace ACT_DiscordTriggers
                     break;
                 case "txtFriend":
                     lst = lstFriends;
+                    break;
+                case "txtAltarTrigger":
+                    lst = lstAltarTriggers;
+                    break;
+                case "txtStatus":
+                    lst = lstStatus;
                     break;
                 default:
                     return;
@@ -1249,15 +1433,21 @@ namespace ACT_DiscordTriggers
 
         private void btnAddTriggers_Click(object sender, EventArgs e)
         {
-            ActGlobals.oFormActMain.AddEditCustomTrigger(CreateTrigger("A teleportation ward leading into the Hidden Canals of Uznair has appeared.", "canalhard"));
-            ActGlobals.oFormActMain.AddEditCustomTrigger(CreateTrigger("A teleportation ward leading into the Lost Canals of Uznair has appeared.", "canalnormal"));
+            ActGlobals.oFormActMain.AddEditCustomTrigger(CreateTrigger("The Hidden Canals of Uznair has begun.", "canalhard"));
+            ActGlobals.oFormActMain.AddEditCustomTrigger(CreateTrigger("The Shifting Altars of Uznair has begun.", "canalspin"));
+            ActGlobals.oFormActMain.AddEditCustomTrigger(CreateTrigger("The Lost Canals of Uznair has begun.", "canalnormal"));
+            ActGlobals.oFormActMain.AddEditCustomTrigger(CreateTrigger("A portal into Uznair has appeared.", "portalspawned"));
             ActGlobals.oFormActMain.AddEditCustomTrigger(CreateTrigger("The Hidden Canals of Uznair has ended.", "canalend"));
             ActGlobals.oFormActMain.AddEditCustomTrigger(CreateTrigger("The Lost Canals of Uznair has ended.", "canalend"));
+            ActGlobals.oFormActMain.AddEditCustomTrigger(CreateTrigger("The Shifting Altars of Uznair has ended.", "canalend"));
+            ActGlobals.oFormActMain.AddEditCustomTrigger(CreateTrigger("An unknown force drives off the Atomos asipu.", "BONUS ROOM"));
             ActGlobals.oFormActMain.AddEditCustomTrigger(CreateTrigger("You obtain a vault key.", "canalkey"));
-            ActGlobals.oFormActMain.AddEditCustomTrigger(CreateTrigger("(?<first>\\w+) (?<last>\\w+) use Dig.", "#${first}"));
-            ActGlobals.oFormActMain.AddEditCustomTrigger(CreateTrigger("(?<first>\\w+) (?<last>\\w+) uses Dig.", "#${first}"));
+            ActGlobals.oFormActMain.AddEditCustomTrigger(CreateTrigger("(?<first>\\w+) (?<last>\\w+) (use|uses) Dig.", "#${first}"));
             ActGlobals.oFormActMain.AddEditCustomTrigger(CreateTrigger("A Namazu stickywhisker appears!", "A wild Sticky Wisker has spawned!"));
             ActGlobals.oFormActMain.AddEditCustomTrigger(CreateTrigger("Abharamu appears!", "A wild Abharamu has spawned!"));
+            ActGlobals.oFormActMain.AddEditCustomTrigger(CreateTrigger("An altar Matanga appears!", "A wild Matanga has spawned!"));
+            ActGlobals.oFormActMain.AddEditCustomTrigger(CreateTrigger("Gold whiskers appear!", "A wild Sticky Wisker has spawned!"));
+            ActGlobals.oFormActMain.AddEditCustomTrigger(CreateTrigger("The circles dance!", "wheelspin"));
             SaveSettings();
             MessageBox.Show("Triggers Added.");
         }
@@ -1281,6 +1471,18 @@ namespace ACT_DiscordTriggers
             string f = lstFriends.Items[ran.Next(lstFriends.Items.Count)].ToString();
 
             speak(string.Format(q, PickDirection(), f));
+        }
+
+        private void btnSetStatus_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtStatus.Text))
+                Log("Please enter text to update status.");
+            else
+            {
+                SetGameAsync(txtStatus.Text);
+                Log(string.Format("Status updated to - {0}", txtStatus.Text));
+                txtStatus.Text = string.Empty;
+            }
         }
     }
 }

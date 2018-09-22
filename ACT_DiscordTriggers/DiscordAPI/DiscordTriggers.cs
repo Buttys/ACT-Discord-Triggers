@@ -74,11 +74,6 @@ namespace DiscordAPI
 
         public static async Task getFFLogs(string server, string name, ICommandContext Context)
         {
-            string character = string.Empty;
-
-            foreach (string part in name.Split(' '))
-                character += (string.IsNullOrEmpty(character) ? "" : " ") + part.First().ToString().ToUpper() + part.Substring(1);
-
 
             var worlds = Worlds.GetWorlds();
             var worldResult = from wrld in worlds
@@ -90,7 +85,7 @@ namespace DiscordAPI
 
 
 
-            var url = new Uri($"https://www.fflogs.com/v1/parses/character/{character}/{world.Name}/{world.Region}/?api_key={DiscordClient.FFLogsToken}");
+            var url = new Uri($"https://www.fflogs.com/v1/parses/character/{name}/{world.Name}/{world.Region}/?api_key={DiscordClient.FFLogsToken}");
             HttpClient client = NewClient();
             string responseBody;
 
@@ -100,7 +95,7 @@ namespace DiscordAPI
             }
             catch (Exception)
             {
-                await Context.Channel.SendMessageAsync($"No parses found for {character} or Incorrect FFLogs Token.");
+                await Context.Channel.SendMessageAsync($"No parses found for {name} or Incorrect FFLogs Token.");
                 return;
             }
             List<Parses> parses = new List<Parses>();
@@ -111,7 +106,7 @@ namespace DiscordAPI
             }
             catch
             {
-                await Context.Channel.SendMessageAsync($"Hidden parses detected, {character} is a scrub.");
+                await Context.Channel.SendMessageAsync($"Hidden parses detected, {name} is a scrub.");
                 return;
             }
 
@@ -122,9 +117,12 @@ namespace DiscordAPI
 
 
             Dictionary<string, List<Parses>> parseData = new Dictionary<string, List<Parses>>();
+            string character = string.Empty;
 
             foreach (Parses parse in parses)
             {
+                if (string.IsNullOrEmpty(character))
+                    character = parse.characterName;
                 if (parseData.ContainsKey(parse.encounterName))
                     parseData[parse.encounterName].Add(parse);
                 else
@@ -162,7 +160,9 @@ namespace DiscordAPI
                     if (classData[spec].Count > 0)
                     {
                         avgPercentile = avgPercentile / classData[spec].Count;
-                        des.AppendLine($"{GetJob(spec)} Percentile <{string.Format("{0:0.#}", avgPercentile)}-{string.Format("{0:0.#}", highestPercentile)}%> Rank - {bestRank} of {outOf}");
+                        List<Parses> data = classData[spec].OrderBy(o => o.percentile).ToList();
+                        int meanPercentile = data[(data.Count + 1) / 2].percentile;
+                        des.AppendLine($"{GetJob(spec)} Mean/Avg/Highest % <{meanPercentile}-{avgPercentile}-{highestPercentile}> Rank - {bestRank} of {outOf}");
                     }
                 }
             }
@@ -170,11 +170,11 @@ namespace DiscordAPI
 
             var embed = new EmbedBuilder()
             .WithTitle($"Click Here - FFLogs Info")
-            .WithUrl($"https://www.fflogs.com/character/eu/lich/{name.Replace(" ","%20")}")
-            //.WithThumbnailUrl(xivdbCharacter == null ? "" : xivdbCharacter.Avatar)
-            //.WithImageUrl(xivdbCharacter == null ? "" : xivdbCharacter.portrait)
+            .WithUrl($"https://www.fflogs.com/character/eu/lich/{name}")
+            .WithThumbnailUrl("https://i.imgur.com/lNX3xcv.jpg")
+            //.WithImageUrl("https://i.imgur.com/lNX3xcv.jpg")
             .WithFooter(new EmbedFooterBuilder()
-            .WithText($"{character} - {world.Name} - {world.Region}")) //| {(xivdbCharacter == null ? "Unknown" : xivdbCharacter.Data.race)}"))
+            .WithText($"{character} - {world.Name} - {world.Region}"))
             .WithColor(new Color(102, 255, 222))
             .WithDescription(des.ToString())
             .Build();
@@ -211,7 +211,7 @@ namespace DiscordAPI
                 case "Dragoon":
                     return "<:drg:343479908632231937>";
                 case "Monk":
-                    return "<:mnk:343479908980228106>";
+                    return "<:mnk:492354531330490368>";
                 case "Ninja":
                     return "<:nin:343479908850466818>";
                 case "Samurai":

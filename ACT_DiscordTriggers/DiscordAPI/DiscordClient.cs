@@ -88,7 +88,6 @@ namespace DiscordAPI
             services = new ServiceCollection().BuildServiceProvider();
             await commands.AddModuleAsync(typeof(DiscordTriggers));
             EnableCommands(EnableDiscordCommands);
-            await bot.SetGameAsync("with Discord");
             BotReady?.Invoke();
             bot.Ready -= Bot_Ready;
         }
