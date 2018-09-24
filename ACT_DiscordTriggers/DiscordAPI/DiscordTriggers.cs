@@ -29,7 +29,7 @@ namespace DiscordAPI
             try
             {
                 string[] parts = link.Split('/');
-                string charname = parts[6].Replace("%20"," ");
+                string charname = parts[6];
                 string charserver = parts[5];
 
                 await getFFLogs(charserver, charname, Context);
@@ -147,10 +147,14 @@ namespace DiscordAPI
                     int avgPercentile = 0;
                     int bestRank = 0;
                     int outOf = 0;
+                    double highestdps = 0;
                     foreach(Parses parse in classData[spec])
                     {
                         if (parse.percentile > highestPercentile)
+                        {
                             highestPercentile = parse.percentile;
+                            highestdps = parse.total;
+                        }
                         if (parse.rank < bestRank || bestRank == 0)
                             bestRank = parse.rank;
                         if (parse.outOf > outOf)
@@ -161,15 +165,15 @@ namespace DiscordAPI
                     {
                         avgPercentile = avgPercentile / classData[spec].Count;
                         List<Parses> data = classData[spec].OrderBy(o => o.percentile).ToList();
-                        int meanPercentile = data[(data.Count + 1) / 2].percentile;
-                        des.AppendLine($"{GetJob(spec)} Mean/Avg/Highest % <{meanPercentile}-{avgPercentile}-{highestPercentile}> Rank - {bestRank} of {outOf}");
+                        int meanPercentile = data[(data.Count) / 2].percentile;
+                        des.AppendLine($"{GetJob(spec)} DPS <{string.Format("{0:0.#}", highestdps)}> <{meanPercentile}-{avgPercentile}-{highestPercentile}>% Rank {bestRank} of {outOf}");
                     }
                 }
             }
             
 
             var embed = new EmbedBuilder()
-            .WithTitle($"Click Here - FFLogs Info")
+            .WithTitle($"Current Savage Data - FFLogs")
             .WithUrl($"https://www.fflogs.com/character/eu/lich/{name}")
             .WithThumbnailUrl("https://i.imgur.com/lNX3xcv.jpg")
             //.WithImageUrl("https://i.imgur.com/lNX3xcv.jpg")

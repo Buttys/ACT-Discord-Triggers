@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NAudio.Wave;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Speech.AudioFormat;
 using System.Speech.Synthesis;
@@ -68,7 +69,7 @@ namespace DiscordAPI
         {
             bot.Ready -= Bot_Ready;
             bot.MessageReceived -= Bot_MessageReceived;
-            if (audioClient?.ConnectionState == ConnectionState.Connected)
+            if (IsConnectedToChannel())
             {
                 voiceStream?.Close();
                 await audioClient.StopAsync();
@@ -80,6 +81,11 @@ namespace DiscordAPI
         public static bool IsConnected()
         {
             return bot?.ConnectionState == ConnectionState.Connected;
+        }
+
+        public static bool IsConnectedToChannel()
+        {
+            return audioClient?.ConnectionState == ConnectionState.Connected;
         }
 
         private static async Task Bot_Ready()
@@ -192,7 +198,7 @@ namespace DiscordAPI
         {
             voiceStream?.Close();
             voiceStream = null;
-            if(audioClient.ConnectionState == ConnectionState.Connected)
+            if (IsConnectedToChannel())
                 await audioClient.StopAsync();
             await bot.SetGameAsync("with Discord");
         }
@@ -249,7 +255,7 @@ namespace DiscordAPI
         {
             lock (speaklock)
             {
-                if (audioClient?.ConnectionState == ConnectionState.Connected)
+                if (IsConnectedToChannel())
                 {
                     if (voiceStream == null)
                         voiceStream = audioClient.CreatePCMStream(AudioApplication.Voice, 128 * 1024);
@@ -268,29 +274,40 @@ namespace DiscordAPI
             }
         }
 
-        public static void SpeakFile(string path)
+        public static void SpeakFile(string path, int vol = 100)
         {
             lock (speaklock)
             {
-                if (audioClient.ConnectionState == ConnectionState.Connected)
+                if(IsConnectedToChannel())
                 {
                     if (voiceStream == null)
                         voiceStream = audioClient.CreatePCMStream(AudioApplication.Voice, 128 * 1024);
                     try
                     {
-                        WaveFileReader wav = new WaveFileReader(path);
-                        WaveFormat waveFormat = new WaveFormat(48000, 16, 2);
-                        WaveStream pcm = WaveFormatConversionStream.CreatePcmStream(wav);
-                        WaveFormatConversionStream output = new WaveFormatConversionStream(waveFormat, pcm);
+                        Process sound = CreateStream(path, vol);
+                        Stream output = sound.StandardOutput.BaseStream;
                         output.CopyTo(voiceStream);
                         voiceStream.Flush();
+                        sound.Close();
                     }
-                    catch (Exception ex)
+                    catch (Exception e)
                     {
-                        Log("Unable to read file: " + ex.Message);
+                        Log($"Sound Stream Error: {e}");
                     }
                 }
             }
+        }
+
+        private static Process CreateStream(string path, int vol)
+        {
+            return Process.Start(new ProcessStartInfo
+            {
+                FileName = "ffmpeg",
+                Arguments = $"-hide_banner -loglevel panic -i \"{path}\" -ac 2 -f s16le -ar 48000 -vol {vol} pipe:1",
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                CreateNoWindow = true
+            });
         }
 
         public static bool SendChannelMessage(string message,ulong channelID)

@@ -38,6 +38,7 @@ namespace ACT_DiscordTriggers
 		private void InitializeComponent() {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.chkShowtext = new System.Windows.Forms.CheckBox();
             this.btnSetStatus = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
@@ -94,7 +95,8 @@ namespace ACT_DiscordTriggers
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.txtTrigger = new System.Windows.Forms.TextBox();
             this.lstMapTriggers = new System.Windows.Forms.ListBox();
-            this.chkShowtext = new System.Windows.Forms.CheckBox();
+            this.sliderEffectVol = new System.Windows.Forms.TrackBar();
+            this.label4 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -112,6 +114,7 @@ namespace ACT_DiscordTriggers
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.sliderEffectVol)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -127,6 +130,8 @@ namespace ACT_DiscordTriggers
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.label4);
+            this.tabPage1.Controls.Add(this.sliderEffectVol);
             this.tabPage1.Controls.Add(this.chkShowtext);
             this.tabPage1.Controls.Add(this.btnSetStatus);
             this.tabPage1.Controls.Add(this.groupBox2);
@@ -164,6 +169,16 @@ namespace ACT_DiscordTriggers
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Discord Settings";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // chkShowtext
+            // 
+            this.chkShowtext.AutoSize = true;
+            this.chkShowtext.Location = new System.Drawing.Point(129, 140);
+            this.chkShowtext.Name = "chkShowtext";
+            this.chkShowtext.Size = new System.Drawing.Size(92, 17);
+            this.chkShowtext.TabIndex = 51;
+            this.chkShowtext.Text = "Show Tokens";
+            this.chkShowtext.UseVisualStyleBackColor = true;
             // 
             // btnSetStatus
             // 
@@ -741,15 +756,23 @@ namespace ACT_DiscordTriggers
             this.lstMapTriggers.Size = new System.Drawing.Size(389, 347);
             this.lstMapTriggers.TabIndex = 1;
             // 
-            // chkShowtext
+            // sliderEffectVol
             // 
-            this.chkShowtext.AutoSize = true;
-            this.chkShowtext.Location = new System.Drawing.Point(129, 140);
-            this.chkShowtext.Name = "chkShowtext";
-            this.chkShowtext.Size = new System.Drawing.Size(92, 17);
-            this.chkShowtext.TabIndex = 51;
-            this.chkShowtext.Text = "Show Tokens";
-            this.chkShowtext.UseVisualStyleBackColor = true;
+            this.sliderEffectVol.Location = new System.Drawing.Point(657, 134);
+            this.sliderEffectVol.Maximum = 100;
+            this.sliderEffectVol.Name = "sliderEffectVol";
+            this.sliderEffectVol.Size = new System.Drawing.Size(193, 45);
+            this.sliderEffectVol.TabIndex = 52;
+            this.sliderEffectVol.Value = 20;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(654, 116);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(73, 13);
+            this.label4.TabIndex = 53;
+            this.label4.Text = "Effect Volume";
             // 
             // DiscordPlugin
             // 
@@ -782,6 +805,7 @@ namespace ACT_DiscordTriggers
             this.groupBox3.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.sliderEffectVol)).EndInit();
             this.ResumeLayout(false);
 
 		}
@@ -863,10 +887,19 @@ namespace ACT_DiscordTriggers
         private CheckBox chkShowtext;
         private Random ran = new Random();
 
+        private FormActMain.PlayTtsDelegate originalTTSDelegate;
+        private Label label4;
+        private TrackBar sliderEffectVol;
+        private FormActMain.PlaySoundDelegate originalSoundDelegate;
+
         #region IActPluginV1 Members
         public void InitPlugin(TabPage pluginScreenSpace, Label pluginStatusText) {
-			//ACT Stuff
-			lblStatus = pluginStatusText;
+            //ACT Stuff
+            originalTTSDelegate = (FormActMain.PlayTtsDelegate)ActGlobals.oFormActMain.PlayTtsMethod.Clone();
+            originalSoundDelegate = (FormActMain.PlaySoundDelegate)ActGlobals.oFormActMain.PlaySoundMethod.Clone();
+            ActGlobals.oFormActMain.PlayTtsMethod = ParseTrigger;
+            ActGlobals.oFormActMain.PlaySoundMethod = speakFile;
+            lblStatus = pluginStatusText;
 			settingsFile = Path.Combine(ActGlobals.oFormActMain.AppDataFolder.FullName, "Config\\ACT_DiscordTriggers.config.xml");
 			pluginScreenSpace.Controls.Add(this);
 			pluginScreenSpace.Text = "Discord Triggers";
@@ -917,8 +950,8 @@ namespace ACT_DiscordTriggers
         }
 
         public async void DeInitPlugin() {
-			ActGlobals.oFormActMain.PlayTtsMethod = ActGlobals.oFormActMain.TTS;
-			ActGlobals.oFormActMain.PlaySoundMethod = ActGlobals.oFormActMain.PlaySoundWmpApi;
+			ActGlobals.oFormActMain.PlayTtsMethod = originalTTSDelegate;
+			ActGlobals.oFormActMain.PlaySoundMethod = originalSoundDelegate;
 			SaveSettings();
 			try {
                 await DiscordClient.deInIt();
@@ -956,11 +989,22 @@ namespace ACT_DiscordTriggers
 
 		#region Discord Methods
 		private void speak(string text) {
-            DiscordClient.Speak(text, cmbTTS.SelectedItem.ToString(), sliderTTSVol.Value, sliderTTSSpeed.Value);
+            if (DiscordClient.IsConnectedToChannel())
+            {
+                if (text.StartsWith("!!"))
+                    originalTTSDelegate(text.Substring(2));
+                else
+                    DiscordClient.Speak(text, cmbTTS.SelectedItem.ToString(), sliderTTSVol.Value, sliderTTSSpeed.Value);
+            }
+            else
+                originalTTSDelegate(text);
         }
 
 		private void speakFile(string path, int volume) {
-            DiscordClient.SpeakFile(path);
+            if (DiscordClient.IsConnectedToChannel())
+                DiscordClient.SpeakFile(path, sliderEffectVol.Value);
+            else
+                originalSoundDelegate(path, volume);
 		}
         private void BotReady()
         {
@@ -1023,11 +1067,7 @@ namespace ACT_DiscordTriggers
 
             btnJoin.Enabled = false;
             if (await DiscordClient.JoinChannel(cmbServer.SelectedItem.ToString(), cmbChan.SelectedItem.ToString()))
-            {
                 btnLeave.Enabled = true;
-                ActGlobals.oFormActMain.PlayTtsMethod = ParseTrigger;
-                ActGlobals.oFormActMain.PlaySoundMethod = speakFile;
-            }
             else
             {
                 Log("Unable to join channel. Does your bot have permission to join this channel?");
@@ -1043,8 +1083,6 @@ namespace ACT_DiscordTriggers
 				btnJoin.Enabled = true;
 				btnLeave.Enabled = false;
 				Log("Left channel.");
-				ActGlobals.oFormActMain.PlayTtsMethod = ActGlobals.oFormActMain.TTS;
-				ActGlobals.oFormActMain.PlaySoundMethod = ActGlobals.oFormActMain.PlaySoundWmpApi;
 				btnJoin.Enabled = true;
 			} catch (Exception ex) {
 				Log("Error leaving channel. Possible connection issue.");
@@ -1074,9 +1112,6 @@ namespace ACT_DiscordTriggers
         {
             try
             {
-                if (!DiscordClient.IsConnected())
-                    return;
-
                 string text = triggerText;
 
                 if (triggerText.StartsWith("#"))
@@ -1106,7 +1141,7 @@ namespace ACT_DiscordTriggers
                         SetGameAsync(string.Format("in {0}'s hole of surprises", activePlayer));
                         return;
                     case "wheelspin":
-                        text = string.Format("Time to spin {0}'s... {1}.", activePlayer, SpinToWin());
+                        text = string.Format("Spinning... {0}", SpinToWin());
                         break;
                     case "canalend":
                         SetGameAsync(GetRandomStatus());
@@ -1145,11 +1180,12 @@ namespace ACT_DiscordTriggers
         {
             try
             {
-                return lstAltarTriggers.Items[ran.Next(lstAltarTriggers.Items.Count)].ToString();
+                return string.Format(lstAltarTriggers.Items[ran.Next(lstAltarTriggers.Items.Count)].ToString(),activePlayer, 
+                    lstFriends.Items[ran.Next(lstFriends.Items.Count)].ToString());
             }
             catch
             {
-                return "hole";
+                return string.Format("{0}'s hole",activePlayer);
             }
         }
 
@@ -1311,6 +1347,7 @@ namespace ACT_DiscordTriggers
             xmlSettings.AddControlSetting(txtFFLogsToken.Name, txtFFLogsToken);
 			xmlSettings.AddControlSetting(sliderTTSVol.Name, sliderTTSVol);
 			xmlSettings.AddControlSetting(sliderTTSSpeed.Name, sliderTTSSpeed);
+            xmlSettings.AddControlSetting(sliderEffectVol.Name, sliderEffectVol);
             xmlSettings.AddControlSetting(txtDiscordID.Name, txtDiscordID);
             xmlSettings.AddControlSetting(chkParseFilter.Name, chkParseFilter);
             xmlSettings.AddControlSetting(txtFFXIVName.Name, txtFFXIVName);
@@ -1469,20 +1506,36 @@ namespace ACT_DiscordTriggers
         {
             string q = lstMapTriggers.SelectedItem != null ? lstMapTriggers.SelectedItem.ToString() : lstMapTriggers.Items[ran.Next(lstMapTriggers.Items.Count)].ToString();
             string f = lstFriends.Items[ran.Next(lstFriends.Items.Count)].ToString();
-
-            speak(string.Format(q, PickDirection(), f));
+            if (DiscordClient.IsConnectedToChannel())
+                speak(string.Format(q, PickDirection(), f));
+            else
+                originalTTSDelegate(string.Format(q, PickDirection(), f));
         }
 
         private void btnSetStatus_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(txtStatus.Text))
-                Log("Please enter text to update status.");
+            string update = txtStatus.Text;
+
+            if (string.IsNullOrEmpty(update))
+            {
+                if (lstStatus.SelectedItem != null)
+                {
+                    update = lstStatus.SelectedItem.ToString();
+                    SetGameAsync(update);
+                    lstStatus.SelectedIndex = -1;
+                }
+                else
+                {
+                    Log("Please enter text or select a status from the list.");
+                    return;
+                }
+            }
             else
             {
-                SetGameAsync(txtStatus.Text);
-                Log(string.Format("Status updated to - {0}", txtStatus.Text));
+                SetGameAsync(update);
                 txtStatus.Text = string.Empty;
             }
+            Log(string.Format("Status updated to - {0}", update));
         }
     }
 }
