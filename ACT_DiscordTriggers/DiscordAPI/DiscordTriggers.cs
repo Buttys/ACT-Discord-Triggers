@@ -29,8 +29,25 @@ namespace DiscordAPI
             try
             {
                 string[] parts = link.Split('/');
-                string charname = parts[6];
-                string charserver = parts[5];
+                string charname;
+                string charserver;
+                if (parts.Length == 6)
+                {
+                    //required for char profiles
+                    //unlikly to be used but just in case
+                    //example - https://www.fflogs.com/character/id/180987
+                    var url = new Uri(link);
+                    HttpClient client = NewClient();
+                    string responseBody = await client.GetStringAsync(url);
+                    charname = Between(responseBody, "<div id=\"character-name\">", "</div>");
+                    string region = Between(responseBody, string.Format("<a id=\"server-link\" href=\"/server/id/{0}\">", Between(responseBody, "<a id=\"server-link\" href=\"/server/id/", "\">")), "</a>");
+                    charserver = region.Split('-')[1];
+                }
+                else
+                {
+                    charname = parts[6];
+                    charserver = parts[5];
+                }
 
                 await getFFLogs(charserver, charname, Context);
             }
@@ -174,7 +191,7 @@ namespace DiscordAPI
 
             var embed = new EmbedBuilder()
             .WithTitle($"Current Savage Data - FFLogs")
-            .WithUrl($"https://www.fflogs.com/character/eu/lich/{name}")
+            .WithUrl(new Uri($"https://www.fflogs.com/character/{world.Region}/{world.Name}/{character}").AbsoluteUri)
             .WithThumbnailUrl("https://i.imgur.com/lNX3xcv.jpg")
             //.WithImageUrl("https://i.imgur.com/lNX3xcv.jpg")
             .WithFooter(new EmbedFooterBuilder()
