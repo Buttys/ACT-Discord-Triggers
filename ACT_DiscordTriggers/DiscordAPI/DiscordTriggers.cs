@@ -49,7 +49,7 @@ namespace DiscordAPI
                     charserver = parts[5];
                 }
 
-                await getFFLogs(charserver, charname, Context);
+                await getFFLogs(charserver, charname, Context.Channel.Id);
             }
             catch
             {
@@ -79,17 +79,17 @@ namespace DiscordAPI
         [Summary("Drellis speciality")]
         public async Task Fflogs(string server, [Remainder] string name)
         {
-            await getFFLogs(server, name, Context);
+            await getFFLogs(server, name, Context.Channel.Id);
         }
 
         [Command("fflog")]
         [Summary("Drellis speciality")]
         public async Task Fflog(string server, [Remainder] string name)
         {
-            await getFFLogs(server, name, Context);
+            await getFFLogs(server, name, Context.Channel.Id);
         }
 
-        public static async Task getFFLogs(string server, string name, ICommandContext Context)
+        public static async Task getFFLogs(string server, string name, ulong channel)
         {
 
             var worlds = Worlds.GetWorlds();
@@ -112,7 +112,7 @@ namespace DiscordAPI
             }
             catch (Exception)
             {
-                await Context.Channel.SendMessageAsync($"No parses found for {name} or Incorrect FFLogs Token.");
+                DiscordClient.SendChannelMessage($"No parses found for {name} or Incorrect FFLogs Token.", channel);
                 return;
             }
             List<Parses> parses = new List<Parses>();
@@ -123,7 +123,7 @@ namespace DiscordAPI
             }
             catch
             {
-                await Context.Channel.SendMessageAsync($"Hidden parses detected, {name} is a scrub.");
+                DiscordClient.SendChannelMessage($"Hidden parses detected, {name} is a scrub.", channel);
                 return;
             }
 
@@ -132,19 +132,22 @@ namespace DiscordAPI
             if (parses.Count == 0)
                 des.AppendLine("No encounters found.");
 
-
+            string charname = string.Empty;
             Dictionary<string, List<Parses>> parseData = new Dictionary<string, List<Parses>>();
-            string character = string.Empty;
 
             foreach (Parses parse in parses)
             {
-                if (string.IsNullOrEmpty(character))
-                    character = parse.characterName;
+                if (string.IsNullOrEmpty(charname))
+                    charname = parse.characterName;
+
                 if (parseData.ContainsKey(parse.encounterName))
                     parseData[parse.encounterName].Add(parse);
                 else
                     parseData.Add(parse.encounterName, new List<Parses> { parse });
             }
+
+            int encounters = 0;
+
 
             foreach(string key in parseData.Keys)
             {
@@ -157,14 +160,13 @@ namespace DiscordAPI
                     else
                         classData.Add(parse.spec, new List<Parses> { parse });
                 }
-
+                
                 foreach(string spec in classData.Keys)
                 {
                     int highestPercentile = 0;
                     int avgPercentile = 0;
-                    int bestRank = 0;
-                    int outOf = 0;
                     double highestdps = 0;
+                    int time = 0;
                     foreach(Parses parse in classData[spec])
                     {
                         if (parse.percentile > highestPercentile)
@@ -172,18 +174,18 @@ namespace DiscordAPI
                             highestPercentile = parse.percentile;
                             highestdps = parse.total;
                         }
-                        if (parse.rank < bestRank || bestRank == 0)
-                            bestRank = parse.rank;
-                        if (parse.outOf > outOf)
-                            outOf = parse.outOf;
                         avgPercentile += parse.percentile;
+                        if (time == 0)
+                            time = parse.duration;
+                        else if (parse.duration < time)
+                            time = parse.duration;
                     }
                     if (classData[spec].Count > 0)
                     {
                         avgPercentile = avgPercentile / classData[spec].Count;
+                        encounters++;
                         List<Parses> data = classData[spec].OrderBy(o => o.percentile).ToList();
-                        int meanPercentile = data[(data.Count) / 2].percentile;
-                        des.AppendLine($"{GetJob(spec)} DPS <{string.Format("{0:0.#}", highestdps)}> <{meanPercentile}-{avgPercentile}-{highestPercentile}>% Rank {bestRank} of {outOf}");
+                        des.AppendLine($"{GetJob(spec)} Best Clear <{string.Format("{0:0.#}", highestdps)}>  Best Time - {String.Format("{0:mm\\:ss}", TimeSpan.FromMilliseconds(time))}");
                     }
                 }
             }
@@ -191,16 +193,16 @@ namespace DiscordAPI
 
             var embed = new EmbedBuilder()
             .WithTitle($"Current Savage Data - FFLogs")
-            .WithUrl(new Uri($"https://www.fflogs.com/character/{world.Region}/{world.Name}/{character}").AbsoluteUri)
+            .WithUrl(new Uri($"https://www.fflogs.com/character/{world.Region}/{world.Name}/{name}").AbsoluteUri)
             .WithThumbnailUrl("https://i.imgur.com/lNX3xcv.jpg")
             //.WithImageUrl("https://i.imgur.com/lNX3xcv.jpg")
             .WithFooter(new EmbedFooterBuilder()
-            .WithText($"{character} - {world.Name} - {world.Region}"))
+            .WithText($"{(string.IsNullOrEmpty(charname) ? name:charname)} - {world.Name} - {world.Region}"))
             .WithColor(new Color(102, 255, 222))
             .WithDescription(des.ToString())
             .Build();
 
-            await Context.Channel.SendMessageAsync("", embed: embed);
+            DiscordClient.SendChannelEmbed(embed, channel);
         }
 
         private static string GetJob(string name)
@@ -232,11 +234,15 @@ namespace DiscordAPI
                 case "Dragoon":
                     return "<:drg:343479908632231937>";
                 case "Monk":
-                    return "<:mnk:492354531330490368>";
+                    return "<:mnk:492354384873652224>";
                 case "Ninja":
                     return "<:nin:343479908850466818>";
                 case "Samurai":
                     return "<:sam:343479909043273730>";
+                case "Dancer":
+                    return "<:dnc:599736106400874507>";
+                case "Gunbreaker":
+                    return "<:gnb:599737249676132393>";
                 default:
                     return ":poop:";
             }

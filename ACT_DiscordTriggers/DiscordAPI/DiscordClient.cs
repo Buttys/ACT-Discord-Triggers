@@ -23,6 +23,7 @@ namespace DiscordAPI
         private static AudioOutStream voiceStream;
         public static string FFLogsToken;
         private static bool EnableDiscordCommands;
+        private static bool EnableFollowMode;
 
         public delegate void Trigger();
         public static Trigger BotReady;
@@ -94,6 +95,7 @@ namespace DiscordAPI
             services = new ServiceCollection().BuildServiceProvider();
             await commands.AddModuleAsync(typeof(DiscordTriggers));
             EnableCommands(EnableDiscordCommands);
+            EnableFollow(EnableFollowMode);
             BotReady?.Invoke();
             bot.Ready -= Bot_Ready;
         }
@@ -108,6 +110,24 @@ namespace DiscordAPI
                 else
                     bot.MessageReceived -= Bot_MessageReceived;
             }
+        }
+
+        public static void EnableFollow(bool enable)
+        {
+            EnableFollowMode = enable;
+            if (IsConnected())
+            {
+                if (EnableFollowMode)
+                    bot.UserVoiceStateUpdated += Bot_UserVoiceStateUpdated;
+                else
+                    bot.UserVoiceStateUpdated -= Bot_UserVoiceStateUpdated;
+            }
+        }
+
+        private static async Task Bot_UserVoiceStateUpdated(SocketUser user, SocketVoiceState previousState, SocketVoiceState newState)
+        {
+            if (user.Id == 183341537319452673)
+               await JoinChannel(newState.VoiceChannel);
         }
 
         public static string[] getServers()
@@ -143,6 +163,19 @@ namespace DiscordAPI
             }
 
             return new string[0];
+        }
+
+        private static SocketVoiceChannel GetChannel(ulong id)
+        {
+            foreach (SocketGuild g in bot.Guilds)
+            {
+                var channels = new List<SocketVoiceChannel>(g.VoiceChannels);
+                foreach (SocketVoiceChannel channel in channels)
+                    if (channel.Id == id)
+                        return channel;
+            }
+
+                return null;
         }
 
         private static SocketVoiceChannel[] getSocketChannels(string server)
@@ -191,6 +224,21 @@ namespace DiscordAPI
                 }
             }
             await bot.SetGameAsync("with ACT Triggers");
+            return true;
+        }
+
+        public static async Task<bool> JoinChannel(SocketVoiceChannel channel)
+        {
+            try
+            {
+                audioClient = await channel.ConnectAsync();
+                Log?.Invoke("Joined channel: " + channel.Name);
+            }
+            catch (Exception e)
+            {
+                Log(e.Message);
+                return false;
+            }
             return true;
         }
 
@@ -312,11 +360,33 @@ namespace DiscordAPI
 
         public static bool SendChannelMessage(string message,ulong channelID)
         {
+            if (!IsConnected())
+                return false;
             try
             {
                 var channel = bot.GetChannel(channelID) as SocketTextChannel;
                 if (channel != null)
                     channel.SendMessageAsync(message);
+                else
+                    return false;
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public static bool SendChannelEmbed(Embed embed, ulong channelID)
+        {
+            if (!IsConnected())
+                return false;
+            try
+            {
+                var channel = bot.GetChannel(channelID) as SocketTextChannel;
+                if (channel != null)
+                    channel.SendMessageAsync("", embed: embed);
                 else
                     return false;
             }
