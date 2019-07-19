@@ -1,10 +1,8 @@
 ﻿using Discord;
 using Discord.Audio;
 using Discord.Commands;
-using Discord.Net.Providers.WS4Net;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
-using NAudio.Wave;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -23,7 +21,6 @@ namespace DiscordAPI
         private static AudioOutStream voiceStream;
         public static string FFLogsToken;
         private static bool EnableDiscordCommands;
-        private static bool EnableFollowMode;
 
         public delegate void Trigger();
         public static Trigger BotReady;
@@ -39,7 +36,7 @@ namespace DiscordAPI
             {
                 bot = new DiscordSocketClient(new DiscordSocketConfig
                 {
-                    //currently not working on current build
+                    //currently not working on current build(required for older versions of windows)
                     //WebSocketProvider = WS4NetProvider.Instance
                 });
             }
@@ -67,7 +64,7 @@ namespace DiscordAPI
             }
         }
 
-        public static async Task deInIt()
+        public static async Task DeInIt()
         {
             bot.Ready -= Bot_Ready;
             bot.MessageReceived -= Bot_MessageReceived;
@@ -96,7 +93,6 @@ namespace DiscordAPI
             services = new ServiceCollection().BuildServiceProvider();
             await commands.AddModuleAsync(typeof(DiscordTriggers),services);
             EnableCommands(EnableDiscordCommands);
-            EnableFollow(EnableFollowMode);
             BotReady?.Invoke();
             bot.Ready -= Bot_Ready;
         }
@@ -113,25 +109,13 @@ namespace DiscordAPI
             }
         }
 
-        public static void EnableFollow(bool enable)
-        {
-            EnableFollowMode = enable;
-            if (IsConnected())
-            {
-                if (EnableFollowMode)
-                    bot.UserVoiceStateUpdated += Bot_UserVoiceStateUpdated;
-                else
-                    bot.UserVoiceStateUpdated -= Bot_UserVoiceStateUpdated;
-            }
-        }
-
         private static async Task Bot_UserVoiceStateUpdated(SocketUser user, SocketVoiceState previousState, SocketVoiceState newState)
         {
             if (user.Id == 183341537319452673)
                await JoinChannel(newState.VoiceChannel);
         }
 
-        public static string[] getServers()
+        public static string[] GetServers()
         {
             try
             {
@@ -147,7 +131,7 @@ namespace DiscordAPI
             }
         }
 
-        public static string[] getChannels(string server)
+        public static string[] GetChannels(string server)
         {
             List<string> discordchannels = new List<string>();
 
@@ -179,7 +163,7 @@ namespace DiscordAPI
                 return null;
         }
 
-        private static SocketVoiceChannel[] getSocketChannels(string server)
+        private static SocketVoiceChannel[] GetSocketChannels(string server)
         {
             List<SocketVoiceChannel> discordchannels = new List<SocketVoiceChannel>();
 
@@ -207,7 +191,7 @@ namespace DiscordAPI
         {
             SocketVoiceChannel chan = null;
 
-            foreach(SocketVoiceChannel vchannel in getSocketChannels(server))
+            foreach(SocketVoiceChannel vchannel in GetSocketChannels(server))
                 if (vchannel.Name == channel)
                     chan = vchannel;
 
@@ -261,13 +245,12 @@ namespace DiscordAPI
 
         private static CommandService commands;
         private static IServiceProvider services;
-        private static char prefix = '!';
+        private static readonly char prefix = '!';
 
         private static async Task Bot_MessageReceived(SocketMessage arg)
         {
-            SocketUserMessage msg = arg as SocketUserMessage;
 
-            if (msg == null || msg.Author.IsBot)
+            if (!(arg is SocketUserMessage msg) || msg.Author.IsBot)
                 return;
 
             int pos = 0;
@@ -282,7 +265,7 @@ namespace DiscordAPI
                 MatchCollection matches = urlRx.Matches(msg.Content);
                 foreach (Match match in matches)
                 {
-                    await DiscordTriggers.getFFLogsFromLink(match.Value, content);
+                    await DiscordTriggers.GetFFLogsFromLink(match.Value, content);
                 }
             }
 
@@ -297,8 +280,8 @@ namespace DiscordAPI
             await msg.DeleteAsync();
         }
 
-        private static object speaklock = new object();
-        private static SpeechAudioFormatInfo formatInfo = new SpeechAudioFormatInfo(48000, AudioBitsPerSample.Sixteen, AudioChannel.Stereo);
+        private static readonly object speaklock = new object();
+        private static readonly SpeechAudioFormatInfo formatInfo = new SpeechAudioFormatInfo(48000, AudioBitsPerSample.Sixteen, AudioChannel.Stereo);
 
         public static void Speak(string text,string voice, int vol, int speed)
         {
@@ -365,8 +348,7 @@ namespace DiscordAPI
                 return false;
             try
             {
-                var channel = bot.GetChannel(channelID) as SocketTextChannel;
-                if (channel != null)
+                if (bot.GetChannel(channelID) is SocketTextChannel channel)
                     channel.SendMessageAsync(message);
                 else
                     return false;
@@ -385,8 +367,7 @@ namespace DiscordAPI
                 return false;
             try
             {
-                var channel = bot.GetChannel(channelID) as SocketTextChannel;
-                if (channel != null)
+                if (bot.GetChannel(channelID) is SocketTextChannel channel)
                     channel.SendMessageAsync("", embed: embed);
                 else
                     return false;

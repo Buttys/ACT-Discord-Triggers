@@ -59,7 +59,6 @@ namespace ACT_DiscordTriggers
             this.lblTTSSpeed = new System.Windows.Forms.Label();
             this.sliderTTSSpeed = new System.Windows.Forms.TrackBar();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.chkautofollow = new System.Windows.Forms.CheckBox();
             this.label5 = new System.Windows.Forms.Label();
             this.chkDiscordCommands = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
@@ -344,7 +343,6 @@ namespace ACT_DiscordTriggers
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.chkautofollow);
             this.groupBox2.Controls.Add(this.label5);
             this.groupBox2.Controls.Add(this.chkDiscordCommands);
             this.groupBox2.Controls.Add(this.tableLayoutPanel6);
@@ -366,16 +364,6 @@ namespace ACT_DiscordTriggers
             this.groupBox2.TabIndex = 49;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Discord Settings";
-            // 
-            // chkautofollow
-            // 
-            this.chkautofollow.AutoSize = true;
-            this.chkautofollow.Location = new System.Drawing.Point(201, 199);
-            this.chkautofollow.Name = "chkautofollow";
-            this.chkautofollow.Size = new System.Drawing.Size(81, 17);
-            this.chkautofollow.TabIndex = 53;
-            this.chkautofollow.Text = "Auto Follow";
-            this.chkautofollow.UseVisualStyleBackColor = true;
             // 
             // label5
             // 
@@ -476,7 +464,7 @@ namespace ACT_DiscordTriggers
             this.btnSetStatus.TabIndex = 50;
             this.btnSetStatus.Text = "Update";
             this.btnSetStatus.UseVisualStyleBackColor = true;
-            this.btnSetStatus.Click += new System.EventHandler(this.btnSetStatus_Click);
+            this.btnSetStatus.Click += new System.EventHandler(this.BtnSetStatus_Click);
             // 
             // cmbServer
             // 
@@ -486,7 +474,7 @@ namespace ACT_DiscordTriggers
             this.cmbServer.Name = "cmbServer";
             this.cmbServer.Size = new System.Drawing.Size(193, 21);
             this.cmbServer.TabIndex = 31;
-            this.cmbServer.SelectedIndexChanged += new System.EventHandler(this.cmbServer_SelectedIndexChanged);
+            this.cmbServer.SelectedIndexChanged += new System.EventHandler(this.CmbServer_SelectedIndexChanged);
             // 
             // btnJoin
             // 
@@ -497,7 +485,7 @@ namespace ACT_DiscordTriggers
             this.btnJoin.TabIndex = 26;
             this.btnJoin.Text = "Join Channel";
             this.btnJoin.UseVisualStyleBackColor = true;
-            this.btnJoin.Click += new System.EventHandler(this.btnJoin_Click);
+            this.btnJoin.Click += new System.EventHandler(this.BtnJoin_Click);
             // 
             // btnDiscordConnect
             // 
@@ -507,7 +495,7 @@ namespace ACT_DiscordTriggers
             this.btnDiscordConnect.TabIndex = 40;
             this.btnDiscordConnect.Text = "Connect";
             this.btnDiscordConnect.UseVisualStyleBackColor = true;
-            this.btnDiscordConnect.Click += new System.EventHandler(this.discordConnectbtn_Click);
+            this.btnDiscordConnect.Click += new System.EventHandler(this.DiscordConnectbtn_Click);
             // 
             // btnLeave
             // 
@@ -518,7 +506,7 @@ namespace ACT_DiscordTriggers
             this.btnLeave.TabIndex = 27;
             this.btnLeave.Text = "Leave Channel";
             this.btnLeave.UseVisualStyleBackColor = true;
-            this.btnLeave.Click += new System.EventHandler(this.btnLeave_Click);
+            this.btnLeave.Click += new System.EventHandler(this.BtnLeave_Click);
             // 
             // lblServer
             // 
@@ -625,7 +613,7 @@ namespace ACT_DiscordTriggers
             this.btnAddTriggers.TabIndex = 4;
             this.btnAddTriggers.Text = "Add Required Triggers";
             this.btnAddTriggers.UseVisualStyleBackColor = true;
-            this.btnAddTriggers.Click += new System.EventHandler(this.btnAddTriggers_Click);
+            this.btnAddTriggers.Click += new System.EventHandler(this.BtnAddTriggers_Click);
             // 
             // btnSaveSettings
             // 
@@ -635,7 +623,7 @@ namespace ACT_DiscordTriggers
             this.btnSaveSettings.TabIndex = 3;
             this.btnSaveSettings.Text = "Save Settings";
             this.btnSaveSettings.UseVisualStyleBackColor = true;
-            this.btnSaveSettings.Click += new System.EventHandler(this.btnSaveSettings_Click);
+            this.btnSaveSettings.Click += new System.EventHandler(this.BtnSaveSettings_Click);
             // 
             // groupBox6
             // 
@@ -962,7 +950,6 @@ namespace ACT_DiscordTriggers
         private GroupBox groupBox9;
         private GroupBox groupBox8;
         private Label label5;
-        private CheckBox chkautofollow;
         private CheckBox chkPartyJoin;
         private FormActMain.PlaySoundDelegate originalSoundDelegate;
 
@@ -972,7 +959,7 @@ namespace ACT_DiscordTriggers
             originalTTSDelegate = (FormActMain.PlayTtsDelegate)ActGlobals.oFormActMain.PlayTtsMethod.Clone();
             originalSoundDelegate = (FormActMain.PlaySoundDelegate)ActGlobals.oFormActMain.PlaySoundMethod.Clone();
             ActGlobals.oFormActMain.PlayTtsMethod = new FormActMain.PlayTtsDelegate(ParseTrigger);
-            ActGlobals.oFormActMain.PlaySoundMethod = new FormActMain.PlaySoundDelegate(speakFile);
+            ActGlobals.oFormActMain.PlaySoundMethod = new FormActMain.PlaySoundDelegate(SpeakFile);
             lblStatus = pluginStatusText;
 			settingsFile = Path.Combine(ActGlobals.oFormActMain.AppDataFolder.FullName, "Config\\ACT_DiscordTriggers.config.xml");
 			pluginScreenSpace.Controls.Add(this);
@@ -997,7 +984,6 @@ namespace ACT_DiscordTriggers
             lstStatus.KeyUp += RemoveListItem;
 
             chkDiscordCommands.CheckedChanged += ChkDiscordCommands_CheckedChanged;
-            chkautofollow.CheckedChanged += ChkAutoFollow_CheckedChanged;
             chkShowtext.CheckedChanged += ChkShowtext_CheckedChanged;
 
             //Discord Bot Stuff
@@ -1005,10 +991,9 @@ namespace ACT_DiscordTriggers
             DiscordClient.LoginFail += LoginFail;
             DiscordClient.Log += Log;
             DiscordClient.EnableCommands(chkDiscordCommands.Checked);
-            DiscordClient.EnableFollow(chkDiscordCommands.Checked);
 
             if (chkAutoConnect.Checked)
-                discordConnectbtn_Click(null, EventArgs.Empty);
+                DiscordConnectbtn_Click(null, EventArgs.Empty);
 
             lblStatus.Text = "Drellis Started";
 		}
@@ -1018,10 +1003,6 @@ namespace ACT_DiscordTriggers
             DiscordClient.EnableCommands(chkDiscordCommands.Checked);
         }
 
-        private void ChkAutoFollow_CheckedChanged(object sender, EventArgs e)
-        {
-            DiscordClient.EnableFollow(chkautofollow.Checked);
-        }
         private void ChkShowtext_CheckedChanged(object sender, EventArgs e)
         {
             txtParseChannel.UseSystemPasswordChar = !chkShowtext.Checked;
@@ -1034,7 +1015,7 @@ namespace ACT_DiscordTriggers
 			ActGlobals.oFormActMain.PlaySoundMethod = originalSoundDelegate;
 			SaveSettings();
 			try {
-                await DiscordClient.deInIt();
+                await DiscordClient.DeInIt();
 			} catch (Exception ex) {
 				ActGlobals.oFormActMain.WriteExceptionLog(ex, "Error with DeInit of Discord Plugin.");
 			}
@@ -1065,17 +1046,17 @@ namespace ACT_DiscordTriggers
 		}
         #endregion
 
-        private object speaklock = new object();
+        private readonly object speaklock = new object();
 
 		#region Discord Methods
-		private void speak(string text) {
+		private void Speak(string text) {
             if (DiscordClient.IsConnectedToChannel())
                     DiscordClient.Speak(text, cmbTTS.SelectedItem.ToString(), sliderTTSVol.Value, sliderTTSSpeed.Value);
             else
                 originalTTSDelegate(text);
         }
 
-		private void speakFile(string path, int volume) {
+		private void SpeakFile(string path, int volume) {
             if (DiscordClient.IsConnectedToChannel())
                 DiscordClient.SpeakFile(path, sliderEffectVol.Value);
             else
@@ -1087,7 +1068,7 @@ namespace ACT_DiscordTriggers
             Log("Connected to Discord.");
             btnJoin.Enabled = true;
             btnSetStatus.Enabled = true;
-            populateServers();
+            PopulateServers();
             SetGameAsync(GetRandomStatus());
         }
 
@@ -1098,11 +1079,11 @@ namespace ACT_DiscordTriggers
         }
 
 
-        private void populateServers()
+        private void PopulateServers()
         {
             try
             {
-                string[] servers = DiscordClient.getServers();
+                string[] servers = DiscordClient.GetServers();
 
                 cmbServer.Items.Clear();
                 cmbChan.Items.Clear();
@@ -1120,12 +1101,12 @@ namespace ACT_DiscordTriggers
             }
         }
 
-        private void populateChannels(string server)
+        private void PopulateChannels(string server)
         {
             try
             {
                 cmbChan.Items.Clear();
-                cmbChan.Items.AddRange(DiscordClient.getChannels(server));
+                cmbChan.Items.AddRange(DiscordClient.GetChannels(server));
                 if (cmbChan.Items.Count > 0)
                     cmbChan.SelectedIndex = 0;
             }
@@ -1138,7 +1119,7 @@ namespace ACT_DiscordTriggers
         #endregion
 
         #region UI Events
-        private async void btnJoin_Click(object sender, EventArgs e) {
+        private async void BtnJoin_Click(object sender, EventArgs e) {
 
             btnJoin.Enabled = false;
             if (await DiscordClient.JoinChannel(cmbServer.SelectedItem.ToString(), cmbChan.SelectedItem.ToString()))
@@ -1147,11 +1128,11 @@ namespace ACT_DiscordTriggers
             {
                 Log("Unable to join channel. Does your bot have permission to join this channel?");
                 btnJoin.Enabled = true;
-                populateServers();
+                PopulateServers();
             }
         }
 
-		private void btnLeave_Click(object sender, EventArgs e) {
+		private void BtnLeave_Click(object sender, EventArgs e) {
 			btnLeave.Enabled = false;
 			try {
                 DiscordClient.LeaveChannel();
@@ -1166,9 +1147,9 @@ namespace ACT_DiscordTriggers
 			}
 		}
 
-        private void cmbServer_SelectedIndexChanged(object sender, EventArgs e)
+        private void CmbServer_SelectedIndexChanged(object sender, EventArgs e)
         {
-            populateChannels(cmbServer.SelectedItem.ToString());
+            PopulateChannels(cmbServer.SelectedItem.ToString());
         }
         #endregion
 
@@ -1182,6 +1163,7 @@ namespace ACT_DiscordTriggers
 
         private string activePlayer = "You";
         private bool normalCanals = true;
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Await.Warning", "CS4014:Await.Warning")]
 
         public void ParseTrigger(string triggerText)
         {
@@ -1198,13 +1180,13 @@ namespace ACT_DiscordTriggers
 
                 if(triggerText.StartsWith("!!"))
                 {
-                    if (chkPartyJoin.Enabled)
+                    if (chkPartyJoin.Checked)
                     {
                         string[] parts = SplitCamelCase(triggerText.Substring(2));
                         if (parts.Length == 2)
-                            DiscordTriggers.getFFLogs("Lich", string.Join("", new string[] { parts[0], parts[1] }), ulong.Parse(txtParseChannel.Text));
+                            DiscordTriggers.GetFFLogs("Lich", string.Join("", new string[] { parts[0], parts[1] }), ulong.Parse(txtParseChannel.Text));
                         else
-                            DiscordTriggers.getFFLogs(parts[2], string.Join("", new string[] { parts[0], parts[1] }), ulong.Parse(txtParseChannel.Text));
+                            DiscordTriggers.GetFFLogs(parts[2], string.Join("", new string[] { parts[0], parts[1] }), ulong.Parse(txtParseChannel.Text));
                     }
                     return;
                 }
@@ -1236,7 +1218,7 @@ namespace ACT_DiscordTriggers
                         return;
                 }
 
-                speak(text);
+                Speak(text);
             }
             catch (Exception ex)
             {
@@ -1456,7 +1438,6 @@ namespace ACT_DiscordTriggers
             xmlSettings.AddControlSetting(lstStatus.Name, lstStatus);
             xmlSettings.AddControlSetting(chkDiscordCommands.Name, chkDiscordCommands);
             xmlSettings.AddControlSetting(chkfilterdmg.Name, chkfilterdmg);
-            xmlSettings.AddControlSetting(chkautofollow.Name, chkautofollow);
             xmlSettings.AddControlSetting(chkPartyJoin.Name, chkPartyJoin);
 
             if (File.Exists(settingsFile)) {
@@ -1480,10 +1461,12 @@ namespace ACT_DiscordTriggers
             try
             {
                 FileStream fs = new FileStream(settingsFile, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-                XmlTextWriter xWriter = new XmlTextWriter(fs, Encoding.UTF8);
-                xWriter.Formatting = Formatting.Indented;
-                xWriter.Indentation = 1;
-                xWriter.IndentChar = '\t';
+                XmlTextWriter xWriter = new XmlTextWriter(fs, Encoding.UTF8)
+                {
+                    Formatting = Formatting.Indented,
+                    Indentation = 1,
+                    IndentChar = '\t'
+                };
                 xWriter.WriteStartDocument(true);
                 xWriter.WriteStartElement("Config");
                 xWriter.WriteStartElement("SettingsSerializer");
@@ -1559,14 +1542,14 @@ namespace ACT_DiscordTriggers
             DiscordClient.FFLogsToken = txtFFLogsToken.Text;
         }
 
-        private void discordConnectbtn_Click(object sender, EventArgs e)
+        private void DiscordConnectbtn_Click(object sender, EventArgs e)
         {
             btnDiscordConnect.Enabled = false;
             Log("Connecting to Discord...");
             DiscordClient.InIt(txtToken.Text, txtFFLogsToken.Text);
         }
 
-        private void btnAddTriggers_Click(object sender, EventArgs e)
+        private void BtnAddTriggers_Click(object sender, EventArgs e)
         {
             ActGlobals.oFormActMain.AddEditCustomTrigger(CreateTrigger("The Hidden Canals of Uznair has begun.", "canalhard"));
             ActGlobals.oFormActMain.AddEditCustomTrigger(CreateTrigger("The Shifting Altars of Uznair has begun.", "canalspin"));
@@ -1592,7 +1575,7 @@ namespace ACT_DiscordTriggers
             return new CustomTrigger(trigger, 3, texttospeech, false, string.Empty, false) { Category = category };
         }
 
-        private void btnSaveSettings_Click(object sender, EventArgs e)
+        private void BtnSaveSettings_Click(object sender, EventArgs e)
         {
             if (SaveSettings())
                 MessageBox.Show("Saved.");
@@ -1604,10 +1587,10 @@ namespace ACT_DiscordTriggers
         {
             string q = lstMapTriggers.SelectedItem != null ? lstMapTriggers.SelectedItem.ToString() : lstMapTriggers.Items[ran.Next(lstMapTriggers.Items.Count)].ToString();
             string f = lstFriends.Items[ran.Next(lstFriends.Items.Count)].ToString();
-            speak(string.Format(q, PickDirection(), f));
+            Speak(string.Format(q, PickDirection(), f));
         }
 
-        private void btnSetStatus_Click(object sender, EventArgs e)
+        private void BtnSetStatus_Click(object sender, EventArgs e)
         {
             string update = txtStatus.Text;
 

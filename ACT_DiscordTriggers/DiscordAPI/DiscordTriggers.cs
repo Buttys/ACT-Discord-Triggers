@@ -24,7 +24,7 @@ namespace DiscordAPI
             return client;
         }
 
-        public static async Task getFFLogsFromLink(string link, ICommandContext Context)
+        public static async Task GetFFLogsFromLink(string link, ICommandContext Context)
         {
             try
             {
@@ -49,7 +49,7 @@ namespace DiscordAPI
                     charserver = parts[5];
                 }
 
-                await getFFLogs(charserver, charname, Context.Channel.Id);
+                await GetFFLogs(charserver, charname, Context.Channel.Id);
             }
             catch
             {
@@ -79,17 +79,17 @@ namespace DiscordAPI
         [Summary("Drellis speciality")]
         public async Task Fflogs(string server, [Remainder] string name)
         {
-            await getFFLogs(server, name, Context.Channel.Id);
+            await GetFFLogs(server, name, Context.Channel.Id);
         }
 
         [Command("fflog")]
         [Summary("Drellis speciality")]
         public async Task Fflog(string server, [Remainder] string name)
         {
-            await getFFLogs(server, name, Context.Channel.Id);
+            await GetFFLogs(server, name, Context.Channel.Id);
         }
 
-        public static async Task getFFLogs(string server, string name, ulong channel)
+        public static async Task GetFFLogs(string server, string name, ulong channel)
         {
 
             var worlds = Worlds.GetWorlds();
