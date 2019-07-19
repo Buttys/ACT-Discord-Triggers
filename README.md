@@ -2,7 +2,7 @@
 An ACT plugin for using ACT Custom Triggers with Discord bots.
 
 - Discord triggers and solo only trigger support
-- FFLogs support - grab a players logs with commands/direct link
+- FFLogs support - grab a players logs with commands/direct link/on party join
 - Enhanced treasure map triggers
 - Auto parse posting.
 
