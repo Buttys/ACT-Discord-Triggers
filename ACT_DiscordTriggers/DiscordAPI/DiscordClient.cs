@@ -39,7 +39,8 @@ namespace DiscordAPI
             {
                 bot = new DiscordSocketClient(new DiscordSocketConfig
                 {
-                    WebSocketProvider = WS4NetProvider.Instance
+                    //currently not working on current build
+                    //WebSocketProvider = WS4NetProvider.Instance
                 });
             }
             catch (NotSupportedException)
@@ -93,7 +94,7 @@ namespace DiscordAPI
         {
             commands = new CommandService();
             services = new ServiceCollection().BuildServiceProvider();
-            await commands.AddModuleAsync(typeof(DiscordTriggers));
+            await commands.AddModuleAsync(typeof(DiscordTriggers),services);
             EnableCommands(EnableDiscordCommands);
             EnableFollow(EnableFollowMode);
             BotReady?.Invoke();

@@ -39,39 +39,44 @@ namespace ACT_DiscordTriggers
 		private void InitializeComponent() {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.chkDiscordCommands = new System.Windows.Forms.CheckBox();
-            this.chkAutoConnect = new System.Windows.Forms.CheckBox();
-            this.chkParseFilter = new System.Windows.Forms.CheckBox();
+            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.chkPartyJoin = new System.Windows.Forms.CheckBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.chkfilterdmg = new System.Windows.Forms.CheckBox();
+            this.chkParseFilter = new System.Windows.Forms.CheckBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtFFLogsToken = new System.Windows.Forms.TextBox();
+            this.txtParseChannel = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.txtFFXIVName = new System.Windows.Forms.TextBox();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.lblTTS = new System.Windows.Forms.Label();
+            this.cmbTTS = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.lblTTSVol = new System.Windows.Forms.Label();
             this.sliderEffectVol = new System.Windows.Forms.TrackBar();
-            this.chkShowtext = new System.Windows.Forms.CheckBox();
-            this.btnSetStatus = new System.Windows.Forms.Button();
+            this.sliderTTSVol = new System.Windows.Forms.TrackBar();
+            this.lblTTSSpeed = new System.Windows.Forms.Label();
+            this.sliderTTSSpeed = new System.Windows.Forms.TrackBar();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.chkautofollow = new System.Windows.Forms.CheckBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.chkDiscordCommands = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.txtStatus = new System.Windows.Forms.TextBox();
             this.lstStatus = new System.Windows.Forms.ListBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.txtFFXIVName = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.txtParseChannel = new System.Windows.Forms.TextBox();
-            this.btnDiscordConnect = new System.Windows.Forms.Button();
-            this.txtFFLogsToken = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.sliderTTSSpeed = new System.Windows.Forms.TrackBar();
-            this.lblTTSSpeed = new System.Windows.Forms.Label();
-            this.sliderTTSVol = new System.Windows.Forms.TrackBar();
-            this.lblTTSVol = new System.Windows.Forms.Label();
-            this.cmbChan = new System.Windows.Forms.ComboBox();
-            this.lblChan = new System.Windows.Forms.Label();
-            this.cmbServer = new System.Windows.Forms.ComboBox();
-            this.lblServer = new System.Windows.Forms.Label();
-            this.cmbTTS = new System.Windows.Forms.ComboBox();
-            this.lblTTS = new System.Windows.Forms.Label();
-            this.btnLeave = new System.Windows.Forms.Button();
-            this.btnJoin = new System.Windows.Forms.Button();
-            this.txtToken = new System.Windows.Forms.TextBox();
+            this.chkAutoConnect = new System.Windows.Forms.CheckBox();
+            this.chkShowtext = new System.Windows.Forms.CheckBox();
             this.lblBotTok = new System.Windows.Forms.Label();
+            this.txtToken = new System.Windows.Forms.TextBox();
+            this.btnSetStatus = new System.Windows.Forms.Button();
+            this.cmbServer = new System.Windows.Forms.ComboBox();
+            this.btnJoin = new System.Windows.Forms.Button();
+            this.btnDiscordConnect = new System.Windows.Forms.Button();
+            this.btnLeave = new System.Windows.Forms.Button();
+            this.lblServer = new System.Windows.Forms.Label();
+            this.lblChan = new System.Windows.Forms.Label();
+            this.cmbChan = new System.Windows.Forms.ComboBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
@@ -98,18 +103,15 @@ namespace ACT_DiscordTriggers
             this.lstMapTriggers = new System.Windows.Forms.ListBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.logBox = new System.Windows.Forms.TextBox();
-            this.groupBox8 = new System.Windows.Forms.GroupBox();
-            this.groupBox9 = new System.Windows.Forms.GroupBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.chkautofollow = new System.Windows.Forms.CheckBox();
-            this.chkPartyJoin = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.groupBox9.SuspendLayout();
+            this.groupBox8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sliderEffectVol)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sliderTTSVol)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sliderTTSSpeed)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sliderTTSSpeed)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sliderTTSVol)).BeginInit();
             this.tabPage2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
@@ -122,8 +124,6 @@ namespace ACT_DiscordTriggers
             this.groupBox3.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.tabPage3.SuspendLayout();
-            this.groupBox8.SuspendLayout();
-            this.groupBox9.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -151,39 +151,42 @@ namespace ACT_DiscordTriggers
             this.tabPage1.Text = "Discord Settings";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // chkDiscordCommands
+            // groupBox9
             // 
-            this.chkDiscordCommands.AutoSize = true;
-            this.chkDiscordCommands.Checked = true;
-            this.chkDiscordCommands.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkDiscordCommands.Location = new System.Drawing.Point(9, 178);
-            this.chkDiscordCommands.Name = "chkDiscordCommands";
-            this.chkDiscordCommands.Size = new System.Drawing.Size(153, 17);
-            this.chkDiscordCommands.TabIndex = 47;
-            this.chkDiscordCommands.Text = "Enable Discord Commands";
-            this.chkDiscordCommands.UseVisualStyleBackColor = true;
+            this.groupBox9.Controls.Add(this.chkPartyJoin);
+            this.groupBox9.Controls.Add(this.label3);
+            this.groupBox9.Controls.Add(this.chkfilterdmg);
+            this.groupBox9.Controls.Add(this.chkParseFilter);
+            this.groupBox9.Controls.Add(this.label1);
+            this.groupBox9.Controls.Add(this.txtFFLogsToken);
+            this.groupBox9.Controls.Add(this.txtParseChannel);
+            this.groupBox9.Controls.Add(this.label2);
+            this.groupBox9.Controls.Add(this.txtFFXIVName);
+            this.groupBox9.Location = new System.Drawing.Point(6, 238);
+            this.groupBox9.Name = "groupBox9";
+            this.groupBox9.Size = new System.Drawing.Size(486, 146);
+            this.groupBox9.TabIndex = 56;
+            this.groupBox9.TabStop = false;
+            this.groupBox9.Text = "FFlogs Settings";
             // 
-            // chkAutoConnect
+            // chkPartyJoin
             // 
-            this.chkAutoConnect.AutoSize = true;
-            this.chkAutoConnect.Location = new System.Drawing.Point(107, 201);
-            this.chkAutoConnect.Name = "chkAutoConnect";
-            this.chkAutoConnect.Size = new System.Drawing.Size(91, 17);
-            this.chkAutoConnect.TabIndex = 41;
-            this.chkAutoConnect.Text = "Auto Connect";
-            this.chkAutoConnect.UseVisualStyleBackColor = true;
+            this.chkPartyJoin.AutoSize = true;
+            this.chkPartyJoin.Location = new System.Drawing.Point(216, 91);
+            this.chkPartyJoin.Name = "chkPartyJoin";
+            this.chkPartyJoin.Size = new System.Drawing.Size(98, 17);
+            this.chkPartyJoin.TabIndex = 49;
+            this.chkPartyJoin.Text = "Party Join Logs";
+            this.chkPartyJoin.UseVisualStyleBackColor = true;
             // 
-            // chkParseFilter
+            // label3
             // 
-            this.chkParseFilter.AutoSize = true;
-            this.chkParseFilter.Checked = true;
-            this.chkParseFilter.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkParseFilter.Location = new System.Drawing.Point(216, 68);
-            this.chkParseFilter.Name = "chkParseFilter";
-            this.chkParseFilter.Size = new System.Drawing.Size(83, 17);
-            this.chkParseFilter.TabIndex = 46;
-            this.chkParseFilter.Text = "Filter Parses";
-            this.chkParseFilter.UseVisualStyleBackColor = true;
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 22);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(92, 13);
+            this.label3.TabIndex = 45;
+            this.label3.Text = "Your FFXIV Name";
             // 
             // chkfilterdmg
             // 
@@ -197,6 +200,94 @@ namespace ACT_DiscordTriggers
             this.chkfilterdmg.Text = "Filter Infinite Damage";
             this.chkfilterdmg.UseVisualStyleBackColor = true;
             // 
+            // chkParseFilter
+            // 
+            this.chkParseFilter.AutoSize = true;
+            this.chkParseFilter.Checked = true;
+            this.chkParseFilter.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkParseFilter.Location = new System.Drawing.Point(216, 68);
+            this.chkParseFilter.Name = "chkParseFilter";
+            this.chkParseFilter.Size = new System.Drawing.Size(83, 17);
+            this.chkParseFilter.TabIndex = 46;
+            this.chkParseFilter.Text = "Filter Parses";
+            this.chkParseFilter.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 68);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(76, 13);
+            this.label1.TabIndex = 38;
+            this.label1.Text = "FFLogs Token";
+            // 
+            // txtFFLogsToken
+            // 
+            this.txtFFLogsToken.Location = new System.Drawing.Point(9, 86);
+            this.txtFFLogsToken.Name = "txtFFLogsToken";
+            this.txtFFLogsToken.Size = new System.Drawing.Size(193, 20);
+            this.txtFFLogsToken.TabIndex = 39;
+            this.txtFFLogsToken.UseSystemPasswordChar = true;
+            // 
+            // txtParseChannel
+            // 
+            this.txtParseChannel.Location = new System.Drawing.Point(216, 41);
+            this.txtParseChannel.Name = "txtParseChannel";
+            this.txtParseChannel.Size = new System.Drawing.Size(193, 20);
+            this.txtParseChannel.TabIndex = 42;
+            this.txtParseChannel.UseSystemPasswordChar = true;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(213, 25);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(73, 13);
+            this.label2.TabIndex = 43;
+            this.label2.Text = "Parse Chat ID";
+            // 
+            // txtFFXIVName
+            // 
+            this.txtFFXIVName.Location = new System.Drawing.Point(9, 44);
+            this.txtFFXIVName.Name = "txtFFXIVName";
+            this.txtFFXIVName.Size = new System.Drawing.Size(193, 20);
+            this.txtFFXIVName.TabIndex = 44;
+            // 
+            // groupBox8
+            // 
+            this.groupBox8.Controls.Add(this.lblTTS);
+            this.groupBox8.Controls.Add(this.cmbTTS);
+            this.groupBox8.Controls.Add(this.label4);
+            this.groupBox8.Controls.Add(this.lblTTSVol);
+            this.groupBox8.Controls.Add(this.sliderEffectVol);
+            this.groupBox8.Controls.Add(this.sliderTTSVol);
+            this.groupBox8.Controls.Add(this.lblTTSSpeed);
+            this.groupBox8.Controls.Add(this.sliderTTSSpeed);
+            this.groupBox8.Location = new System.Drawing.Point(498, 9);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Size = new System.Drawing.Size(211, 267);
+            this.groupBox8.TabIndex = 55;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "Sound Options";
+            // 
+            // lblTTS
+            // 
+            this.lblTTS.AutoSize = true;
+            this.lblTTS.Location = new System.Drawing.Point(6, 16);
+            this.lblTTS.Name = "lblTTS";
+            this.lblTTS.Size = new System.Drawing.Size(58, 13);
+            this.lblTTS.TabIndex = 28;
+            this.lblTTS.Text = "TTS Voice";
+            // 
+            // cmbTTS
+            // 
+            this.cmbTTS.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTTS.FormattingEnabled = true;
+            this.cmbTTS.Location = new System.Drawing.Point(9, 38);
+            this.cmbTTS.Name = "cmbTTS";
+            this.cmbTTS.Size = new System.Drawing.Size(193, 21);
+            this.cmbTTS.TabIndex = 29;
+            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -205,6 +296,15 @@ namespace ACT_DiscordTriggers
             this.label4.Size = new System.Drawing.Size(73, 13);
             this.label4.TabIndex = 53;
             this.label4.Text = "Effect Volume";
+            // 
+            // lblTTSVol
+            // 
+            this.lblTTSVol.AutoSize = true;
+            this.lblTTSVol.Location = new System.Drawing.Point(6, 64);
+            this.lblTTSVol.Name = "lblTTSVol";
+            this.lblTTSVol.Size = new System.Drawing.Size(66, 13);
+            this.lblTTSVol.TabIndex = 34;
+            this.lblTTSVol.Text = "TTS Volume";
             // 
             // sliderEffectVol
             // 
@@ -215,26 +315,32 @@ namespace ACT_DiscordTriggers
             this.sliderEffectVol.TabIndex = 52;
             this.sliderEffectVol.Value = 20;
             // 
-            // chkShowtext
+            // sliderTTSVol
             // 
-            this.chkShowtext.AutoSize = true;
-            this.chkShowtext.Location = new System.Drawing.Point(9, 201);
-            this.chkShowtext.Name = "chkShowtext";
-            this.chkShowtext.Size = new System.Drawing.Size(92, 17);
-            this.chkShowtext.TabIndex = 51;
-            this.chkShowtext.Text = "Show Tokens";
-            this.chkShowtext.UseVisualStyleBackColor = true;
+            this.sliderTTSVol.Location = new System.Drawing.Point(9, 80);
+            this.sliderTTSVol.Maximum = 20;
+            this.sliderTTSVol.Name = "sliderTTSVol";
+            this.sliderTTSVol.Size = new System.Drawing.Size(193, 45);
+            this.sliderTTSVol.TabIndex = 35;
+            this.sliderTTSVol.Value = 10;
             // 
-            // btnSetStatus
+            // lblTTSSpeed
             // 
-            this.btnSetStatus.Enabled = false;
-            this.btnSetStatus.Location = new System.Drawing.Point(287, 195);
-            this.btnSetStatus.Name = "btnSetStatus";
-            this.btnSetStatus.Size = new System.Drawing.Size(94, 23);
-            this.btnSetStatus.TabIndex = 50;
-            this.btnSetStatus.Text = "Update";
-            this.btnSetStatus.UseVisualStyleBackColor = true;
-            this.btnSetStatus.Click += new System.EventHandler(this.btnSetStatus_Click);
+            this.lblTTSSpeed.AutoSize = true;
+            this.lblTTSSpeed.Location = new System.Drawing.Point(10, 128);
+            this.lblTTSSpeed.Name = "lblTTSSpeed";
+            this.lblTTSSpeed.Size = new System.Drawing.Size(62, 13);
+            this.lblTTSSpeed.TabIndex = 36;
+            this.lblTTSSpeed.Text = "TTS Speed";
+            // 
+            // sliderTTSSpeed
+            // 
+            this.sliderTTSSpeed.Location = new System.Drawing.Point(9, 144);
+            this.sliderTTSSpeed.Maximum = 20;
+            this.sliderTTSSpeed.Name = "sliderTTSSpeed";
+            this.sliderTTSSpeed.Size = new System.Drawing.Size(193, 45);
+            this.sliderTTSSpeed.TabIndex = 37;
+            this.sliderTTSSpeed.Value = 10;
             // 
             // groupBox2
             // 
@@ -260,6 +366,37 @@ namespace ACT_DiscordTriggers
             this.groupBox2.TabIndex = 49;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Discord Settings";
+            // 
+            // chkautofollow
+            // 
+            this.chkautofollow.AutoSize = true;
+            this.chkautofollow.Location = new System.Drawing.Point(201, 199);
+            this.chkautofollow.Name = "chkautofollow";
+            this.chkautofollow.Size = new System.Drawing.Size(81, 17);
+            this.chkautofollow.TabIndex = 53;
+            this.chkautofollow.Text = "Auto Follow";
+            this.chkautofollow.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(213, 16);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(56, 13);
+            this.label5.TabIndex = 52;
+            this.label5.Text = "Bot Status";
+            // 
+            // chkDiscordCommands
+            // 
+            this.chkDiscordCommands.AutoSize = true;
+            this.chkDiscordCommands.Checked = true;
+            this.chkDiscordCommands.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkDiscordCommands.Location = new System.Drawing.Point(9, 178);
+            this.chkDiscordCommands.Name = "chkDiscordCommands";
+            this.chkDiscordCommands.Size = new System.Drawing.Size(153, 17);
+            this.chkDiscordCommands.TabIndex = 47;
+            this.chkDiscordCommands.Text = "Enable Discord Commands";
+            this.chkDiscordCommands.UseVisualStyleBackColor = true;
             // 
             // tableLayoutPanel6
             // 
@@ -293,119 +430,53 @@ namespace ACT_DiscordTriggers
             this.lstStatus.Size = new System.Drawing.Size(261, 122);
             this.lstStatus.TabIndex = 1;
             // 
-            // label3
+            // chkAutoConnect
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 22);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(92, 13);
-            this.label3.TabIndex = 45;
-            this.label3.Text = "Your FFXIV Name";
+            this.chkAutoConnect.AutoSize = true;
+            this.chkAutoConnect.Location = new System.Drawing.Point(107, 201);
+            this.chkAutoConnect.Name = "chkAutoConnect";
+            this.chkAutoConnect.Size = new System.Drawing.Size(91, 17);
+            this.chkAutoConnect.TabIndex = 41;
+            this.chkAutoConnect.Text = "Auto Connect";
+            this.chkAutoConnect.UseVisualStyleBackColor = true;
             // 
-            // txtFFXIVName
+            // chkShowtext
             // 
-            this.txtFFXIVName.Location = new System.Drawing.Point(9, 44);
-            this.txtFFXIVName.Name = "txtFFXIVName";
-            this.txtFFXIVName.Size = new System.Drawing.Size(193, 20);
-            this.txtFFXIVName.TabIndex = 44;
+            this.chkShowtext.AutoSize = true;
+            this.chkShowtext.Location = new System.Drawing.Point(9, 201);
+            this.chkShowtext.Name = "chkShowtext";
+            this.chkShowtext.Size = new System.Drawing.Size(92, 17);
+            this.chkShowtext.TabIndex = 51;
+            this.chkShowtext.Text = "Show Tokens";
+            this.chkShowtext.UseVisualStyleBackColor = true;
             // 
-            // label2
+            // lblBotTok
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(213, 25);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(73, 13);
-            this.label2.TabIndex = 43;
-            this.label2.Text = "Parse Chat ID";
+            this.lblBotTok.AutoSize = true;
+            this.lblBotTok.Location = new System.Drawing.Point(6, 131);
+            this.lblBotTok.Name = "lblBotTok";
+            this.lblBotTok.Size = new System.Drawing.Size(96, 13);
+            this.lblBotTok.TabIndex = 22;
+            this.lblBotTok.Text = "Discord Bot Token";
             // 
-            // txtParseChannel
+            // txtToken
             // 
-            this.txtParseChannel.Location = new System.Drawing.Point(216, 41);
-            this.txtParseChannel.Name = "txtParseChannel";
-            this.txtParseChannel.Size = new System.Drawing.Size(193, 20);
-            this.txtParseChannel.TabIndex = 42;
-            this.txtParseChannel.UseSystemPasswordChar = true;
+            this.txtToken.Location = new System.Drawing.Point(9, 151);
+            this.txtToken.Name = "txtToken";
+            this.txtToken.Size = new System.Drawing.Size(193, 20);
+            this.txtToken.TabIndex = 23;
+            this.txtToken.UseSystemPasswordChar = true;
             // 
-            // btnDiscordConnect
+            // btnSetStatus
             // 
-            this.btnDiscordConnect.Location = new System.Drawing.Point(387, 195);
-            this.btnDiscordConnect.Name = "btnDiscordConnect";
-            this.btnDiscordConnect.Size = new System.Drawing.Size(93, 23);
-            this.btnDiscordConnect.TabIndex = 40;
-            this.btnDiscordConnect.Text = "Connect";
-            this.btnDiscordConnect.UseVisualStyleBackColor = true;
-            this.btnDiscordConnect.Click += new System.EventHandler(this.discordConnectbtn_Click);
-            // 
-            // txtFFLogsToken
-            // 
-            this.txtFFLogsToken.Location = new System.Drawing.Point(9, 86);
-            this.txtFFLogsToken.Name = "txtFFLogsToken";
-            this.txtFFLogsToken.Size = new System.Drawing.Size(193, 20);
-            this.txtFFLogsToken.TabIndex = 39;
-            this.txtFFLogsToken.UseSystemPasswordChar = true;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 68);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(76, 13);
-            this.label1.TabIndex = 38;
-            this.label1.Text = "FFLogs Token";
-            // 
-            // sliderTTSSpeed
-            // 
-            this.sliderTTSSpeed.Location = new System.Drawing.Point(9, 144);
-            this.sliderTTSSpeed.Maximum = 20;
-            this.sliderTTSSpeed.Name = "sliderTTSSpeed";
-            this.sliderTTSSpeed.Size = new System.Drawing.Size(193, 45);
-            this.sliderTTSSpeed.TabIndex = 37;
-            this.sliderTTSSpeed.Value = 10;
-            // 
-            // lblTTSSpeed
-            // 
-            this.lblTTSSpeed.AutoSize = true;
-            this.lblTTSSpeed.Location = new System.Drawing.Point(10, 128);
-            this.lblTTSSpeed.Name = "lblTTSSpeed";
-            this.lblTTSSpeed.Size = new System.Drawing.Size(62, 13);
-            this.lblTTSSpeed.TabIndex = 36;
-            this.lblTTSSpeed.Text = "TTS Speed";
-            // 
-            // sliderTTSVol
-            // 
-            this.sliderTTSVol.Location = new System.Drawing.Point(9, 80);
-            this.sliderTTSVol.Maximum = 20;
-            this.sliderTTSVol.Name = "sliderTTSVol";
-            this.sliderTTSVol.Size = new System.Drawing.Size(193, 45);
-            this.sliderTTSVol.TabIndex = 35;
-            this.sliderTTSVol.Value = 10;
-            // 
-            // lblTTSVol
-            // 
-            this.lblTTSVol.AutoSize = true;
-            this.lblTTSVol.Location = new System.Drawing.Point(6, 64);
-            this.lblTTSVol.Name = "lblTTSVol";
-            this.lblTTSVol.Size = new System.Drawing.Size(66, 13);
-            this.lblTTSVol.TabIndex = 34;
-            this.lblTTSVol.Text = "TTS Volume";
-            // 
-            // cmbChan
-            // 
-            this.cmbChan.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbChan.FormattingEnabled = true;
-            this.cmbChan.Location = new System.Drawing.Point(9, 79);
-            this.cmbChan.Name = "cmbChan";
-            this.cmbChan.Size = new System.Drawing.Size(193, 21);
-            this.cmbChan.TabIndex = 33;
-            // 
-            // lblChan
-            // 
-            this.lblChan.AutoSize = true;
-            this.lblChan.Location = new System.Drawing.Point(6, 61);
-            this.lblChan.Name = "lblChan";
-            this.lblChan.Size = new System.Drawing.Size(46, 13);
-            this.lblChan.TabIndex = 32;
-            this.lblChan.Text = "Channel";
+            this.btnSetStatus.Enabled = false;
+            this.btnSetStatus.Location = new System.Drawing.Point(287, 195);
+            this.btnSetStatus.Name = "btnSetStatus";
+            this.btnSetStatus.Size = new System.Drawing.Size(94, 23);
+            this.btnSetStatus.TabIndex = 50;
+            this.btnSetStatus.Text = "Update";
+            this.btnSetStatus.UseVisualStyleBackColor = true;
+            this.btnSetStatus.Click += new System.EventHandler(this.btnSetStatus_Click);
             // 
             // cmbServer
             // 
@@ -416,44 +487,6 @@ namespace ACT_DiscordTriggers
             this.cmbServer.Size = new System.Drawing.Size(193, 21);
             this.cmbServer.TabIndex = 31;
             this.cmbServer.SelectedIndexChanged += new System.EventHandler(this.cmbServer_SelectedIndexChanged);
-            // 
-            // lblServer
-            // 
-            this.lblServer.AutoSize = true;
-            this.lblServer.Location = new System.Drawing.Point(6, 19);
-            this.lblServer.Name = "lblServer";
-            this.lblServer.Size = new System.Drawing.Size(38, 13);
-            this.lblServer.TabIndex = 30;
-            this.lblServer.Text = "Server";
-            // 
-            // cmbTTS
-            // 
-            this.cmbTTS.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbTTS.FormattingEnabled = true;
-            this.cmbTTS.Location = new System.Drawing.Point(9, 38);
-            this.cmbTTS.Name = "cmbTTS";
-            this.cmbTTS.Size = new System.Drawing.Size(193, 21);
-            this.cmbTTS.TabIndex = 29;
-            // 
-            // lblTTS
-            // 
-            this.lblTTS.AutoSize = true;
-            this.lblTTS.Location = new System.Drawing.Point(6, 16);
-            this.lblTTS.Name = "lblTTS";
-            this.lblTTS.Size = new System.Drawing.Size(58, 13);
-            this.lblTTS.TabIndex = 28;
-            this.lblTTS.Text = "TTS Voice";
-            // 
-            // btnLeave
-            // 
-            this.btnLeave.Enabled = false;
-            this.btnLeave.Location = new System.Drawing.Point(108, 106);
-            this.btnLeave.Name = "btnLeave";
-            this.btnLeave.Size = new System.Drawing.Size(94, 23);
-            this.btnLeave.TabIndex = 27;
-            this.btnLeave.Text = "Leave Channel";
-            this.btnLeave.UseVisualStyleBackColor = true;
-            this.btnLeave.Click += new System.EventHandler(this.btnLeave_Click);
             // 
             // btnJoin
             // 
@@ -466,22 +499,53 @@ namespace ACT_DiscordTriggers
             this.btnJoin.UseVisualStyleBackColor = true;
             this.btnJoin.Click += new System.EventHandler(this.btnJoin_Click);
             // 
-            // txtToken
+            // btnDiscordConnect
             // 
-            this.txtToken.Location = new System.Drawing.Point(9, 151);
-            this.txtToken.Name = "txtToken";
-            this.txtToken.Size = new System.Drawing.Size(193, 20);
-            this.txtToken.TabIndex = 23;
-            this.txtToken.UseSystemPasswordChar = true;
+            this.btnDiscordConnect.Location = new System.Drawing.Point(387, 195);
+            this.btnDiscordConnect.Name = "btnDiscordConnect";
+            this.btnDiscordConnect.Size = new System.Drawing.Size(93, 23);
+            this.btnDiscordConnect.TabIndex = 40;
+            this.btnDiscordConnect.Text = "Connect";
+            this.btnDiscordConnect.UseVisualStyleBackColor = true;
+            this.btnDiscordConnect.Click += new System.EventHandler(this.discordConnectbtn_Click);
             // 
-            // lblBotTok
+            // btnLeave
             // 
-            this.lblBotTok.AutoSize = true;
-            this.lblBotTok.Location = new System.Drawing.Point(6, 131);
-            this.lblBotTok.Name = "lblBotTok";
-            this.lblBotTok.Size = new System.Drawing.Size(96, 13);
-            this.lblBotTok.TabIndex = 22;
-            this.lblBotTok.Text = "Discord Bot Token";
+            this.btnLeave.Enabled = false;
+            this.btnLeave.Location = new System.Drawing.Point(108, 106);
+            this.btnLeave.Name = "btnLeave";
+            this.btnLeave.Size = new System.Drawing.Size(94, 23);
+            this.btnLeave.TabIndex = 27;
+            this.btnLeave.Text = "Leave Channel";
+            this.btnLeave.UseVisualStyleBackColor = true;
+            this.btnLeave.Click += new System.EventHandler(this.btnLeave_Click);
+            // 
+            // lblServer
+            // 
+            this.lblServer.AutoSize = true;
+            this.lblServer.Location = new System.Drawing.Point(6, 19);
+            this.lblServer.Name = "lblServer";
+            this.lblServer.Size = new System.Drawing.Size(38, 13);
+            this.lblServer.TabIndex = 30;
+            this.lblServer.Text = "Server";
+            // 
+            // lblChan
+            // 
+            this.lblChan.AutoSize = true;
+            this.lblChan.Location = new System.Drawing.Point(6, 61);
+            this.lblChan.Name = "lblChan";
+            this.lblChan.Size = new System.Drawing.Size(46, 13);
+            this.lblChan.TabIndex = 32;
+            this.lblChan.Text = "Channel";
+            // 
+            // cmbChan
+            // 
+            this.cmbChan.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbChan.FormattingEnabled = true;
+            this.cmbChan.Location = new System.Drawing.Point(9, 79);
+            this.cmbChan.Name = "cmbChan";
+            this.cmbChan.Size = new System.Drawing.Size(193, 21);
+            this.cmbChan.TabIndex = 33;
             // 
             // tabPage2
             // 
@@ -772,70 +836,6 @@ namespace ACT_DiscordTriggers
             this.logBox.Size = new System.Drawing.Size(931, 470);
             this.logBox.TabIndex = 25;
             // 
-            // groupBox8
-            // 
-            this.groupBox8.Controls.Add(this.lblTTS);
-            this.groupBox8.Controls.Add(this.cmbTTS);
-            this.groupBox8.Controls.Add(this.label4);
-            this.groupBox8.Controls.Add(this.lblTTSVol);
-            this.groupBox8.Controls.Add(this.sliderEffectVol);
-            this.groupBox8.Controls.Add(this.sliderTTSVol);
-            this.groupBox8.Controls.Add(this.lblTTSSpeed);
-            this.groupBox8.Controls.Add(this.sliderTTSSpeed);
-            this.groupBox8.Location = new System.Drawing.Point(498, 9);
-            this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(211, 267);
-            this.groupBox8.TabIndex = 55;
-            this.groupBox8.TabStop = false;
-            this.groupBox8.Text = "Sound Options";
-            // 
-            // groupBox9
-            // 
-            this.groupBox9.Controls.Add(this.chkPartyJoin);
-            this.groupBox9.Controls.Add(this.label3);
-            this.groupBox9.Controls.Add(this.chkfilterdmg);
-            this.groupBox9.Controls.Add(this.chkParseFilter);
-            this.groupBox9.Controls.Add(this.label1);
-            this.groupBox9.Controls.Add(this.txtFFLogsToken);
-            this.groupBox9.Controls.Add(this.txtParseChannel);
-            this.groupBox9.Controls.Add(this.label2);
-            this.groupBox9.Controls.Add(this.txtFFXIVName);
-            this.groupBox9.Location = new System.Drawing.Point(6, 238);
-            this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Size = new System.Drawing.Size(486, 146);
-            this.groupBox9.TabIndex = 56;
-            this.groupBox9.TabStop = false;
-            this.groupBox9.Text = "FFlogs Settings";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(213, 16);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(56, 13);
-            this.label5.TabIndex = 52;
-            this.label5.Text = "Bot Status";
-            // 
-            // chkautofollow
-            // 
-            this.chkautofollow.AutoSize = true;
-            this.chkautofollow.Location = new System.Drawing.Point(201, 199);
-            this.chkautofollow.Name = "chkautofollow";
-            this.chkautofollow.Size = new System.Drawing.Size(81, 17);
-            this.chkautofollow.TabIndex = 53;
-            this.chkautofollow.Text = "Auto Follow";
-            this.chkautofollow.UseVisualStyleBackColor = true;
-            // 
-            // chkPartyJoin
-            // 
-            this.chkPartyJoin.AutoSize = true;
-            this.chkPartyJoin.Location = new System.Drawing.Point(216, 91);
-            this.chkPartyJoin.Name = "chkPartyJoin";
-            this.chkPartyJoin.Size = new System.Drawing.Size(98, 17);
-            this.chkPartyJoin.TabIndex = 49;
-            this.chkPartyJoin.Text = "Party Join Logs";
-            this.chkPartyJoin.UseVisualStyleBackColor = true;
-            // 
             // DiscordPlugin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -845,13 +845,17 @@ namespace ACT_DiscordTriggers
             this.Size = new System.Drawing.Size(945, 502);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.groupBox9.ResumeLayout(false);
+            this.groupBox9.PerformLayout();
+            this.groupBox8.ResumeLayout(false);
+            this.groupBox8.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sliderEffectVol)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sliderTTSVol)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sliderTTSSpeed)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.tableLayoutPanel6.ResumeLayout(false);
             this.tableLayoutPanel6.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sliderTTSSpeed)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sliderTTSVol)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.tableLayoutPanel5.ResumeLayout(false);
@@ -870,10 +874,6 @@ namespace ACT_DiscordTriggers
             this.tableLayoutPanel3.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
-            this.groupBox8.ResumeLayout(false);
-            this.groupBox8.PerformLayout();
-            this.groupBox9.ResumeLayout(false);
-            this.groupBox9.PerformLayout();
             this.ResumeLayout(false);
 
 		}
@@ -888,6 +888,7 @@ namespace ACT_DiscordTriggers
 			foreach (InstalledVoice v in tts.GetInstalledVoices())
 				cmbTTS.Items.Add(v.VoiceInfo.Name);
 			cmbTTS.SelectedIndex = 0;
+            
 		}
 
 		Label lblStatus;
