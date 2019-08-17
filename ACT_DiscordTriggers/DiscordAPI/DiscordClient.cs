@@ -306,6 +306,18 @@ namespace DiscordAPI
             }
         }
 
+        public static void SpeakInternal(string text, string voice, int vol, int speed)
+        {
+            lock (speaklock)
+            {
+                SpeechSynthesizer tts = new SpeechSynthesizer();
+                tts.SelectVoice(voice);
+                tts.Volume = vol * 5;
+                tts.Rate = speed - 10;
+                tts.Speak(text);
+            }
+        }
+
         public static void SpeakFile(string path, int vol = 100)
         {
             lock (speaklock)

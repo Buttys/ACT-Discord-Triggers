@@ -1053,7 +1053,7 @@ namespace ACT_DiscordTriggers
             if (DiscordClient.IsConnectedToChannel())
                     DiscordClient.Speak(text, cmbTTS.SelectedItem.ToString(), sliderTTSVol.Value, sliderTTSSpeed.Value);
             else
-                originalTTSDelegate(text);
+                DiscordClient.SpeakInternal(text, cmbTTS.SelectedItem.ToString(), sliderTTSVol.Value, sliderTTSSpeed.Value);
         }
 
 		private void SpeakFile(string path, int volume) {
@@ -1177,8 +1177,7 @@ namespace ACT_DiscordTriggers
                     activePlayer = player;
                     return;
                 }
-
-                if(triggerText.StartsWith("!!"))
+                else if (triggerText.StartsWith("!!"))
                 {
                     if (chkPartyJoin.Checked)
                     {
@@ -1190,6 +1189,13 @@ namespace ACT_DiscordTriggers
                     }
                     return;
                 }
+                else if (triggerText.StartsWith("!"))
+                {
+                    DiscordClient.SpeakInternal(text.Substring(1), cmbTTS.SelectedItem.ToString(), sliderTTSVol.Value, sliderTTSSpeed.Value);
+                    return;
+                }
+
+
 
                 switch (text)
                 {
